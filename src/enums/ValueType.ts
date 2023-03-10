@@ -2,7 +2,7 @@ export enum ValueType {
     INT,
     NULL,
     ARRAY,
-    DOUBLE,
+    FLOAT,
     STRING,
     BOOLEAN,
     COMMAND,
