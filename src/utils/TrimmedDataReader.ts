@@ -1,18 +1,18 @@
 export class TrimmedDataReader {
 
+    private readonly checkpoints: number[];
+    
     private readonly data: string;
-
+    
     private index: number;
-
-    private checkpoints: number[];
 
     /**
      * @param data The data to read from.
      */
     constructor(data: string) {
+        this.checkpoints = [];
         this.data = data;
         this.index = 0;
-        this.checkpoints = [];
     }
 
     /**
@@ -20,14 +20,14 @@ export class TrimmedDataReader {
      * @param data The data to read.
      * @returns The data if it was found, false otherwise.
      */
-    public read(data: string): string | false;
+    public read(data: string): string | void;
     /**
      * Reads the given regex from the data string and returns it if it was found.
      * @param regex The regex to read.
      * @returns The regex result if it was found, false otherwise.
      */
-    public read(regex: RegExp): RegExpExecArray | false;
-    public read(arg0: RegExp | string): RegExpExecArray | string | false {
+    public read(regex: RegExp): RegExpExecArray | void;
+    public read(arg0: RegExp | string): RegExpExecArray | string | void {
         this.index += [
             ...this.data.matchAll(/\/\/.*$|\/\*(\s|.)*?\*\/|\s+/gym)
         ].reduce((sum, current) => current[0].length + sum, 0);
@@ -44,8 +44,6 @@ export class TrimmedDataReader {
                 return arg0;
             } else {
                 this.revertCheckpoint(checkpoint);
-
-                return false;
             }
         } else {
             const result = new RegExp(arg0.source, "y" + arg0.flags.replace(/[syg]/g, "")).exec(this.data.slice(this.index)) ?? false;
@@ -58,8 +56,6 @@ export class TrimmedDataReader {
                 return result;
             } else {
                 this.revertCheckpoint(checkpoint);
-
-                return false;
             }
         }
     }
