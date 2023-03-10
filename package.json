@@ -4,9 +4,16 @@
   "description": "",
   "main": "dist/index.js",
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "test": "cucumber-js"
   },
   "keywords": [],
   "author": "SMJS",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "@cucumber/cucumber": "^9.0.0",
+    "@types/chai": "^4.3.4",
+    "chai": "^4.3.7",
+    "ts-node": "^10.9.1"
+  }
 }
