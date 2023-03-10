@@ -1,29 +1,40 @@
-import type { TokenType } from "../enums/TokenType";
+import type { TokenValue } from "../types/TokenValue";
 import type { ValueType } from "../enums/ValueType";
 import { TrimmedDataReader } from "../utils/TrimmedDataReader";
+import { TokenType } from "../enums/TokenType";
 
-export abstract class Token<T extends TokenType> {
+export abstract class Token<T1 extends TokenType, T2 extends TokenValue = T1 extends TokenType.VALUE ? never : string> {
     
-    public readonly type: T;
+    public readonly type: T1;
 
     public readonly valueType?: ValueType;
     
-    public readonly section: string | false;
+    public readonly value?: T2;
 
     constructor(type: TokenType.VALUE, valueType: ValueType, data: TrimmedDataReader);
-    constructor(type: T extends TokenType.VALUE ? never : T, data: TrimmedDataReader);
-    constructor(type: T, arg1: ValueType | TrimmedDataReader, arg2?: TrimmedDataReader) {
+    constructor(type: T1 extends TokenType.VALUE ? never : T1, data: TrimmedDataReader);
+    constructor(type: T1, arg1: ValueType | TrimmedDataReader, arg2?: TrimmedDataReader) {
+        let value: T2 | void;
         this.type = type;
 
         if (arg2 && typeof arg1 == "number") {
             this.valueType = arg1;
-            this.section = this.parse(arg2);
-        } else if (arg1 instanceof TrimmedDataReader) {
-            this.section = this.parse(arg1);
+            value = this.parse(arg2);
+        } else if (arg1 instanceof TrimmedDataReader  && type != TokenType.VALUE) {
+            value = this.parse(arg1);
         } else {
             throw new Error("Argument mismatch");
         }
+
+        if (typeof value == "undefined") {
+        } else {
+            this.value = value;
+        }
     }
 
-    protected abstract parse(data: TrimmedDataReader): string | false;
+    protected abstract parse(data: TrimmedDataReader): T2 extends never ? T2 : T2 | void;
+    
+    public test(): this is Token<T1, T2> & { value: T2 } {
+        return typeof this.value != "undefined";
+    }
 }
