@@ -3,20 +3,20 @@ name: CI/CD
 on:
   push:
     branches:
-    - main
+      - main
   pull_request:
     types: 
-    - opened
-    - edited
-    - synchronize
-    - reopened
+      - opened
+      - edited
+      - synchronize
+      - reopened
     branches:
-    - main
+      - main
   pull_request_target:
     types: 
-    - closed
+      - closed
     branches:
-    - main
+      - main
 
 permissions:
   contents: read
@@ -34,14 +34,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Setup Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: latest
-        cache: npm
-    - run: npm ci
-    - run: npm run build
+      - uses: actions/checkout@v3
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: latest
+          cache: npm
+      - run: npm ci
+      - run: npm run build
 
   test:
     name: Test the project
@@ -49,27 +49,27 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Setup Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: latest
-        cache: npm
-    - run: npm ci
-    - run: npm test
-    - name: Uploading test page artifact
-      uses: actions/upload-artifact@v3
-      with:
-        name: test-results
-        path: './pages/test-results/index.html'
-        retention-days: 1
+      - uses: actions/checkout@v3
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: latest
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - name: Uploading test page artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-results
+          path: './pages/test-results/index.html'
+          retention-days: 1
 
   pages:
     name: Deploy the test results to GitHub Pages
     if: ${{ github.event_name != 'pull_request' ||  && github.event.pull_request.merged == true }}
 
     needs:
-    - test
+      - test
 
     environment:
       name: github-pages
@@ -78,17 +78,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Download all page artifacts
-      uses: actions/download-artifact@v3
-      with:
-        path: './pages'
-    - name: Setup Pages
-      uses: actions/configure-pages@v3
-    - name: Upload artifact
-      uses: actions/upload-pages-artifact@v1
-      with:
-        path: './pages'
-    - name: Deploy to GitHub Pages
-      id: deployment
-      uses: actions/deploy-pages@v1
+      - uses: actions/checkout@v3
+      - name: Download all page artifacts
+        uses: actions/download-artifact@v3
+        with:
+          path: './pages'
+      - name: Setup Pages
+        uses: actions/configure-pages@v3
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v1
+        with:
+          path: './pages'
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v1
