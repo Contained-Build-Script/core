@@ -49,7 +49,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: test-page-artifact
-        path: './pages/test/index.html'
+        path: './pages/test-results/index.html'
         retention-days: 1
 
   pages:
