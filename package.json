@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
-    "pretest": "mkdirp pages",
+    "pretest": "mkdirp pages/test",
     "test": "cucumber-js"
   },
   "keywords": [],

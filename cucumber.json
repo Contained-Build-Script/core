@@ -4,8 +4,8 @@
     "require": [ "tests/**/*.ts" ],
     "requireModule": [ "ts-node/register" ],
     "format": [
-      "progress-bar",
-      "html:pages/index.html"
+      "usage",
+      "html:pages/test/index.html"
     ],
     "parallel": 4,
     "backtrace": true,
