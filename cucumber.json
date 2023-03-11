@@ -4,7 +4,6 @@
     "require": [ "tests/**/*.ts" ],
     "requireModule": [ "ts-node/register" ],
     "format": [
-      "usage",
       "html:pages/test-results/index.html"
     ],
     "parallel": 4,
