@@ -48,8 +48,8 @@ jobs:
     - name: Uploading test page artifact
       uses: actions/upload-artifact@v3
       with:
-        name: test-page-artifact
-        path: './pages/**/*.html'
+        name: test-results
+        path: './pages/test-results/index.html'
         retention-days: 1
 
   pages:
