@@ -64,7 +64,7 @@ jobs:
 
   pages:
     name: Deploy the test results to GitHub Pages
-    if: ${{ github.event_name != 'pull_request' ||  && github.event.action == 'closed' }}
+    if: ${{ github.event_name != 'pull_request' ||  && github.event.pull_request.merged == true }}
 
     needs:
     - test
