@@ -5,7 +5,7 @@
     "requireModule": [ "ts-node/register" ],
     "format": [
       "progress-bar",
-      "html:cucumber-report.html"
+      "html:pages/index.html"
     ],
     "parallel": 4,
     "backtrace": true,

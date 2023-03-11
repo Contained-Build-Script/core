@@ -5,6 +5,7 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
+    "pretest": "mkdirp pages",
     "test": "cucumber-js"
   },
   "keywords": [],
@@ -14,6 +15,7 @@
     "@cucumber/cucumber": "^9.0.0",
     "@types/chai": "^4.3.4",
     "chai": "^4.3.7",
+    "mkdirp": "^2.1.5",
     "ts-node": "^10.9.1"
   }
 }
