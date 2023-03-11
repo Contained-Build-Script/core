@@ -3,7 +3,7 @@ name: CI/CD
 on:
   push:
     branches:
-    - master
+    - main
   pull_request:
     types: 
     - opened
@@ -11,7 +11,12 @@ on:
     - synchronize
     - reopened
     branches:
-    - master
+    - main
+  pull_request_target:
+    types: 
+    - closed
+    branches:
+    - main
 
 permissions:
   contents: read
