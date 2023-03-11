@@ -48,7 +48,7 @@ jobs:
     - name: Cache pages
       uses: actions/cache@v3.3.0
       with:
-        path: pages
+        path: './pages'
         key: page-cache
 
   pages:
@@ -68,6 +68,7 @@ jobs:
     - name: Restore pages
       uses: actions/cache@v3.3.0
       with:
+        path: './pages'
         key: page-cache
         fail-on-cache-miss: true
     - name: Setup Pages
