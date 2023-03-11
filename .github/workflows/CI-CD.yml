@@ -7,7 +7,6 @@ on:
     branches: [ "main" ]
 
 env:
-  OS: ubuntu-latest
   NODE_VERSION: 18
   BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
   PAGES_PATH: ./pages
@@ -23,31 +22,31 @@ concurrency:
 
 jobs:
   build:
-    name: Build the project in node v${{ env.NODE_VERSION }}}
+    name: Build the project in node v$NODE_VERSION
 
-    runs-on: ${{ env.OS }}
+    runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v3
-    - name: Setup Node.js v${{ env.NODE_VERSION }}}
+    - name: Setup Node.js v$NODE_VERSION
       uses: actions/setup-node@v3
       with:
-        node-version: ${{ env.NODE_VERSION }}}
+        node-version: $NODE_VERSION
         cache: npm
     - run: npm ci
     - run: npm run build
 
   test:
-    name: Test the project in v${{ env.NODE_VERSION }}}
+    name: Test the project in v$NODE_VERSION
 
-    runs-on: ${{ env.OS }}
+    runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v3
-    - name: Setup Node.js v${{ env.NODE_VERSION }}}
+    - name: Setup Node.js v$NODE_VERSION
       uses: actions/setup-node@v3
       with:
-        node-version: ${{ env.NODE_VERSION }}}
+        node-version: $NODE_VERSION
         cache: npm
     - run: npm ci
     - run: npm test
@@ -55,7 +54,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: test-results
-        path: '${{ env.PAGES_PATH }}}/test-results/index.html'
+        path: '$PAGES_PATH/test-results/index.html'
         retention-days: 1
 
   pages:
@@ -68,20 +67,20 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
 
-    runs-on: ${{ env.OS }}
+    runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v3
     - name: Download all page artifacts
       uses: actions/download-artifact@v3
       with:
-        path: ${{ env.PAGES_PATH }}}/${{ env.BRANCH_NAME }}}
+        path: $PAGES_PATH/$BRANCH_NAME
     - name: Setup Pages
       uses: actions/configure-pages@v3
     - name: Upload artifact
       uses: actions/upload-pages-artifact@v1
       with:
-        path: ${{ env.PAGES_PATH }}}
+        path: $PAGES_PATH
     - name: Deploy to GitHub Pages
       id: deployment
       uses: actions/deploy-pages@v1
