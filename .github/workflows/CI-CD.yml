@@ -12,11 +12,6 @@ on:
     - reopened
     branches:
     - master
-  pull_request_target:
-    types: 
-    - closed
-    branches:
-    - master
 
 permissions:
   contents: read
