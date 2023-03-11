@@ -10,6 +10,8 @@ on:
     - edited
     - synchronize
     - reopened
+    branches:
+    - master
   pull_request_target:
     types: 
     - closed
