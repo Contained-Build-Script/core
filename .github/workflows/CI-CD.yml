@@ -53,6 +53,8 @@ jobs:
   pages:
     name: Deploy the test results to GitHub Pages
 
+    needs: [test]
+
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
