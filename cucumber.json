@@ -5,7 +5,7 @@
     "requireModule": [ "ts-node/register" ],
     "format": [
       "usage",
-      "html:pages/test/index.html"
+      "html:pages/test-results/index.html"
     ],
     "parallel": 4,
     "backtrace": true,
