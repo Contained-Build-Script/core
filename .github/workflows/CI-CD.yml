@@ -10,7 +10,13 @@ on:
     - edited
     - synchronize
     - reopened
+    branches:
+    - master
+  pull_request_target:
+    types: 
     - closed
+    branches:
+    - master
 
 permissions:
   contents: read
@@ -60,7 +66,7 @@ jobs:
 
   pages:
     name: Deploy the test results to GitHub Pages
-    if: ${{ github.event_name != 'pull_request' || github.event.pull_request.merged == true }}
+    if: ${{ github.event_name != 'pull_request' ||  && github.event.pull_request.merged == true }}
 
     needs:
     - test
