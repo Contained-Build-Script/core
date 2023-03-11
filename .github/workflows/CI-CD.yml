@@ -16,77 +16,41 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  cache:
-    name: Install the dependencies
-
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v3
-      - name: Setup Node.js v18
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18
-          cache: npm
-      - name: Cache dependencies
-        uses: actions/cache@v3
-        id: cache-npm
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
-      - name: Install dependencies
-        if: steps.cache-primes.outputs.cache-hit != 'true'
-        run: npm ci
-
   build:
-    name: Build the project in node v16.x and v18.x
-
-    needs:
-      - cache
+    name: Build the project in node v18
 
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
-      - name: Setup Node.js v18
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18
-          cache: npm
-      - name: Cache dependencies
-        uses: actions/cache@v3
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-npm-v3-${{ hashFiles('package-lock.json') }}
-      - run: npm run build
+    - uses: actions/checkout@v3
+    - name: Setup Node.js v18
+      uses: actions/setup-node@v3
+      with:
+        node-version: 18
+        cache: npm
+    - run: npm ci
+    - run: npm run build
 
   test:
-    name: Test the project in v18.x
-
-    needs:
-     - cache
+    name: Test the project in v18
 
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
-      - name: Setup Node.js v18
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18
-          cache: npm
-      - name: Cache dependencies
-        uses: actions/cache@v3
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-npm-v3-${{ hashFiles('package-lock.json') }}
-      - run: npm test
+    - uses: actions/checkout@v3
+    - name: Setup Node.js v18
+      uses: actions/setup-node@v3
+      with:
+        node-version: 18
+        cache: npm
+    - run: npm ci
+    - run: npm test
 
   pages:
     name: Deploy the test results to GitHub Pages
 
     needs:
-      - test
+    - test
 
     environment:
       name: github-pages
@@ -95,13 +59,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
-      - name: Setup Pages
-        uses: actions/configure-pages@v3
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v1
-        with:
-          path: './pages'
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v1
+    - uses: actions/checkout@v3
+    - name: Setup Pages
+      uses: actions/configure-pages@v3
+    - name: Upload artifact
+      uses: actions/upload-pages-artifact@v1
+      with:
+        path: './pages'
+    - name: Deploy to GitHub Pages
+      id: deployment
+      uses: actions/deploy-pages@v1
