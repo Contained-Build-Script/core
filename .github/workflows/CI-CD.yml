@@ -45,11 +45,11 @@ jobs:
         cache: npm
     - run: npm ci
     - run: npm test
-    - name: Uploading page artifact
+    - name: Uploading test page artifact
       uses: actions/upload-artifact@v3
       with:
         name: test-page-artifact
-        path: './pages/test-results/index.html'
+        path: './pages/**/*.html'
         retention-days: 1
 
   pages:
@@ -66,8 +66,10 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    - name: Download all pages artifacts
+    - name: Download all page artifacts
       uses: actions/download-artifact@v3
+      with:
+        path: './pages'
     - name: Setup Pages
       uses: actions/configure-pages@v3
     - name: Upload artifact
