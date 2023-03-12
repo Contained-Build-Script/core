@@ -2,7 +2,7 @@ import type { TrimmedDataReader } from "../utils/TrimmedDataReader";
 import { TokenType } from "../enums/TokenType";
 import { Token } from "../templates/Token";
 
-export class AbstractToken<T extends TokenType> extends Token<T, string> {
+export class AbstractToken<T extends Exclude<TokenType, TokenType.VALUE>> extends Token<T> {
 
     private readonly token: string;
 

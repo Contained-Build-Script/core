@@ -3,7 +3,7 @@ import { TokenType } from "../enums/TokenType";
 import { ValueType } from "../enums/ValueType";
 import { Token } from "../templates/Token";
 
-export class BooleanToken extends Token<TokenType.VALUE, boolean> {
+export class BooleanToken extends Token<TokenType.VALUE, ValueType.BOOLEAN> {
 
     constructor(data: TrimmedDataReader) {
         super(TokenType.VALUE, ValueType.BOOLEAN, data);

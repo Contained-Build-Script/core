@@ -5,7 +5,7 @@ import { Token } from "../templates/Token";
 import { StringToken } from "./StringToken";
 import { AbstractToken } from "./AbstractToken";
 
-export class DifferenceToken extends Token<TokenType.VALUE, [ string, string ]> {
+export class DifferenceToken extends Token<TokenType.VALUE, ValueType.COMMAND> {
 
     constructor(data: TrimmedDataReader) {
         super(TokenType.VALUE, ValueType.COMMAND, data);
