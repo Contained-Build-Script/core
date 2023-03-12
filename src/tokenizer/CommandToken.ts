@@ -11,7 +11,7 @@ export class CommandToken extends Token<TokenType.VALUE, [ string, string ]> {
         super(TokenType.VALUE, ValueType.COMMAND, data);
     }
 
-    protected parse(data: TrimmedDataReader): [ string, string ] | void {
+    protected parse(data: TrimmedDataReader): [ string, string ] | undefined {
         const arg0 = new StringToken(data);
         const connection = new AbstractToken("with", TokenType.CONTEXT, data);
         const arg1 = new StringToken(data);

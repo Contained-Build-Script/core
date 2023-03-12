@@ -9,7 +9,7 @@ export class BooleanToken extends Token<TokenType.VALUE, boolean> {
         super(TokenType.VALUE, ValueType.BOOLEAN, data);
     }
 
-    protected parse(data: TrimmedDataReader): boolean | void {
+    protected parse(data: TrimmedDataReader): boolean | undefined {
         const result = data.read(/true|false|TRUE|FALSE/);
 
         if (result) {

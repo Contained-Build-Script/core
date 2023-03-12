@@ -8,7 +8,7 @@ export class VariableToken extends Token<TokenType.VARIABLE> {
         super(TokenType.VARIABLE, data);
     }
 
-    protected parse(data: TrimmedDataReader): string | void {
+    protected parse(data: TrimmedDataReader): string | undefined {
         const result = data.read(/#(?!\d)[^\s[\]{}()\\\/+\-%=!*^&|<>,.`"';:?]+/);
 
         if (result) {

@@ -9,7 +9,7 @@ export class StringToken extends Token<TokenType.VALUE, string> {
         super(TokenType.VALUE, ValueType.STRING, data);
     }
 
-    protected parse(data: TrimmedDataReader): string | void {
+    protected parse(data: TrimmedDataReader): string | undefined {
         const result = data.read(/(["'])(.*?(?<!\\)(?:\\\\)*|)\1|`((?:.|\s)*?(?<!\\)(?:\\\\)*|)`/);
 
         if (result) {

@@ -9,7 +9,7 @@ export class NullToken extends Token<TokenType.VALUE, null> {
         super(TokenType.VALUE, ValueType.NULL, data);
     }
 
-    protected parse(data: TrimmedDataReader): null | void {
+    protected parse(data: TrimmedDataReader): null | undefined {
         const result = data.read(/null|NULL/);
 
         if (result) {

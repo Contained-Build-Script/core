@@ -9,8 +9,8 @@ export class NumberToken extends Token<TokenType.VALUE, number> {
         super(TokenType.VALUE, value, data);
     }
 
-    protected parse(data: TrimmedDataReader): number | void {
-        const result = data.read(/(?:-)?(?:0x[a-f\d]+|0b[01]+|(?:(?:\d+)?\.)?\d+(?:e(?:[-+])?\d+)?)/);
+    protected parse(data: TrimmedDataReader): number | undefined {
+        const result = data.read(/(?:-)?(?:0x[\da-f]+|0b[01]+|(?:(?:\d+)?\.)?\d+(?:e(?:[-+])?\d+)?)/);
 
         if (result) {
             const isNegative = +result[0].startsWith("-");
