@@ -20,8 +20,12 @@ Given<TrimmedDataReaderWorld>("the following lines:", function (table: DataTable
 });
 
 Given<TrimmedDataReaderWorld>("a checkpoint is set", function () {
-    this.readers.forEach((reader) => {
-        this.checkpoints.push(reader.addCheckpoint());
+    this.readers.forEach((reader, i) => {
+        if (this.checkpoints[i]) {
+            this.checkpoints[i].push(reader.addCheckpoint());
+        } else {
+            this.checkpoints[i] = [ reader.addCheckpoint() ];
+        }
     });
 });
 
@@ -32,9 +36,15 @@ When<TrimmedDataReaderWorld>("{string} is read", function (string: string) {
     });
 });
 
-When<TrimmedDataReaderWorld>("the last set checkpoint is used", function () {
+When<TrimmedDataReaderWorld>(/^the (first|last) checkpoint is used$/, function (type: "first" | "last") {
     this.readers.forEach((reader, i) => {
-        reader.revertToCheckpoint(this.checkpoints[i]);
+        reader.revertToCheckpoint(this.checkpoints[i][type == "first" ? 0 : this.checkpoints[i].length - 1]);
+    });
+});
+
+When<TrimmedDataReaderWorld>(/^the (first|last) checkpoint is cleaned up$/, function (type: "first" | "last") {
+    this.readers.forEach((reader, i) => {
+        reader.cleanCheckpoint(this.checkpoints[i][type == "first" ? 0 : this.checkpoints[i].length - 1]);
     });
 });
 
@@ -46,7 +56,7 @@ Then<TrimmedDataReaderWorld>("all matches are found", function () {
     });
 });
 
-Then<TrimmedDataReaderWorld>(/^all offsets are at the (start|end) of the input data$/, function (type: string) {
+Then<TrimmedDataReaderWorld>(/^all offsets are at the (start|end) of the input data$/, function (type: "start" | "end") {
     this.table.forEach((line, i) => {
         expect(this.readers[i]["index"]).to.be.a("number").that.equals(type == "start" ? 0 : line.length);
     });
