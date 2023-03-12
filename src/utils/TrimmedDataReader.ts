@@ -32,30 +32,19 @@ export class TrimmedDataReader {
             ...this.data.matchAll(/\/\/.*$|\/\*(\s|.)*?\*\/|\s+/gym)
         ].reduce((sum, current) => current[0].length + sum, 0);
 
-        const checkpoint = this.addCheckpoint();
-
-
-        if (typeof arg0 === "string") {
-            if (this.data.slice(this.index).startsWith(arg0)) {
-                this.cleanCheckpoint(checkpoint);
-
+        if (typeof arg0 == "string") {
+            if (this.data.startsWith(arg0, this.index)) {
                 this.index += arg0.length;
 
                 return arg0;
-            } else {
-                this.revertCheckpoint(checkpoint);
             }
         } else {
             const result = new RegExp(arg0.source, "y" + arg0.flags.replace(/[syg]/g, "")).exec(this.data.slice(this.index)) ?? false;
 
             if (result) {
-                this.cleanCheckpoint(checkpoint);
-
                 this.index += result[0].length;
 
                 return result;
-            } else {
-                this.revertCheckpoint(checkpoint);
             }
         }
     }
@@ -69,19 +58,19 @@ export class TrimmedDataReader {
     }
 
     /**
-     * Returns the index of the given checkpoint.
+     * Returns to the index of the given checkpoint.
      * 
-     * **WARNING!** This method will invalidate all checkpoints with a higher index than the one passed in.
+     * **WARNING!** This method will invalidate all checkpoints with a higher index than the one passed as an argument.
      * @param index The index of the checkpoint to revert to.
      */
-    public revertCheckpoint(index: number): void {
-        this.index = this.checkpoints[this.cleanCheckpoint(index)];
+    public revertToCheckpoint(index: number): void {
+        this.index = this.cleanCheckpoint(index);
     }
 
     /**
      * Removes a checkpoint from the checkpoints array and returns it's value.
      * 
-     * **WARNING!** This method will invalidate all checkpoints with a higher index than the one passed in.
+     * **WARNING!** This method will invalidate all checkpoints with a higher index than the one passed as an argument.
      * @param index The index of the checkpoint to remove.
      * @returns The value of the removed checkpoint.
      */

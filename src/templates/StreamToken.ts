@@ -24,7 +24,7 @@ export abstract class StreamToken {
             if (token.test()) {
                 this.tokens.push(token);
             } else {
-                this.data.revertCheckpoint(checkpoint);
+                this.data.revertToCheckpoint(checkpoint);
                 this.isValid = false;
 
                 return;
