@@ -19,7 +19,7 @@ Given<TrimmedDataReaderWorld>("the following lines:", function (table: DataTable
     });
 });
 
-When<TrimmedDataReaderWorld>("a checkpoint is set", function () {
+Given<TrimmedDataReaderWorld>("a checkpoint is set", function () {
     this.readers.forEach((reader) => {
         this.checkpoints.push(reader.addCheckpoint());
     });
