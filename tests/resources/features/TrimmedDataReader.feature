@@ -19,8 +19,8 @@ Feature: Trimmed data reader test
       | /* comment */test |
       | /* comment */ test |
       | /* comment */\n //test\ntest |
-    When a checkpoint is set
-    And "test" is read
+    And a checkpoint is set
+    When "test" is read
     And the last set checkpoint is used
     Then all matches are found
     And all offsets are at the start of the input data

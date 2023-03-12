@@ -65,7 +65,7 @@ jobs:
           retention-days: 1
 
   pages:
-    name: Deploy the test results to GitHub Pages
+    name: Deploy the artifacts to GitHub Pages
     if: ${{ github.event_name != 'pull_request' || github.event.pull_request.merged == true }}
 
     needs:
