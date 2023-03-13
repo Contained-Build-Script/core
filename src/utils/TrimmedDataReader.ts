@@ -3,7 +3,7 @@ export class TrimmedDataReader {
     private readonly checkpoints: number[];
     
     private readonly data: string;
-    
+
     private index: number;
 
     /**
@@ -20,17 +20,15 @@ export class TrimmedDataReader {
      * @param data The data to read.
      * @returns The data if it was found, false otherwise.
      */
-    public read(data: string): string | void;
+    public read(data: string): string | undefined;
     /**
      * Reads the given regex from the data string and returns it if it was found.
      * @param regex The regex to read.
      * @returns The regex result if it was found, false otherwise.
      */
-    public read(regex: RegExp): RegExpExecArray | void;
-    public read(arg0: RegExp | string): RegExpExecArray | string | void {
-        this.index += [
-            ...this.data.matchAll(/\/\/.*$|\/\*(\s|.)*?\*\/|\s+/gym)
-        ].reduce((sum, current) => current[0].length + sum, 0);
+    public read(regex: RegExp): RegExpExecArray | undefined;
+    public read(arg0: RegExp | string): RegExpExecArray | string | undefined {
+        this.index += this.measureUnusedSpace(true);
 
         if (typeof arg0 == "string") {
             if (this.data.startsWith(arg0, this.index)) {
@@ -76,5 +74,19 @@ export class TrimmedDataReader {
      */
     public cleanCheckpoint(index: number): number {
         return this.checkpoints.splice(index)[0];
+    }
+
+    /**
+     * Test if the next token is a whitespace.
+     * @returns The result of the test.
+     */
+    public followedByWhitespace(): boolean {
+        return /\s+/y.test(this.data.slice(this.index + this.measureUnusedSpace(false)));
+    }
+
+    private measureUnusedSpace(withWhitespace: boolean): number {
+        return [
+            ...this.data.slice(this.index).matchAll(new RegExp("\\/\\/.*$|\\/\\*(\\s|.)*?\\*\\/" + (withWhitespace ? "|\\s+" : ""), "gym"))
+        ].reduce((sum, current) => current[0].length + sum, 0);
     }
 }
