@@ -1,10 +1,10 @@
-import { Before, DataTable, Then, When } from "@cucumber/cucumber";
 import type { TokenWorld } from "../worlds/TokenWorld";
-import { Given } from "@cucumber/cucumber";
-import { TrimmedDataReader } from "../../src/utils/TrimmedDataReader";
-import { Token } from "../../src/templates/Token";
+import { Before, DataTable, Then, When, Given } from "@cucumber/cucumber";
 import { expect } from "chai";
+import { TrimmedDataReader } from "../../src/utils/TrimmedDataReader";
+import { ValueType } from "../../src/enums/ValueType";
 import { TokenType } from "../../src/enums/TokenType";
+import { Token } from "../../src/templates/Token";
 
 Before<TokenWorld>(function() {
     this.tokens = [];
@@ -12,7 +12,7 @@ Before<TokenWorld>(function() {
     this.reader = undefined;
 });
 
-Given<TokenWorld>("tokens with the following info:", function(table: DataTable) {
+Given<TokenWorld>(/^(string|regex) parser tokens with the following info:$/, function(parserType: string, table: DataTable) {
     this.tokens.push(...table.hashes().map(({ parser, type, force_space }) => {
         return class Test extends Token<any, any> {
 
@@ -21,10 +21,31 @@ Given<TokenWorld>("tokens with the following info:", function(table: DataTable) 
             }
 
             protected parse(data: TrimmedDataReader): string | undefined {
-                const result = data.read(parser);
+                const result = parserType == "regex" ? data.read(new RegExp(parser)) : data.read(parser);
 
                 if (force_space != "true" || data.followedByWhitespace()) {
-                    return result;
+                    return Array.isArray(result) ? result[0] : result;
+                }
+            }
+        }
+    }));
+});
+
+Given<TokenWorld>(/^(string|regex) parser value tokens with the following info:$/, function(parserType: string, table: DataTable) {
+    const isRegex = parserType == "regex";
+
+    this.tokens.push(...table.hashes().map(({ parser, type, force_space }) => {
+        return class Test extends Token<any, any> {
+
+            constructor(data: TrimmedDataReader) {
+                super(TokenType.VALUE, ValueType[type], data);
+            }
+
+            protected parse(data: TrimmedDataReader): any {
+                const result = isRegex ? data.read(new RegExp(parser)) : data.read(parser);
+
+                if (result && (force_space != "true" || data.followedByWhitespace())) {
+                    return JSON.parse(Array.isArray(result) ? result[0] : result);
                 }
             }
         }
@@ -44,6 +65,12 @@ When<TokenWorld>("parsing the data in order", function() {
 Then<TokenWorld>("the tokens should be:", function(table: DataTable) {
     table.raw().map(([ value ], i) => {
         expect(this.tokenInstances[i].value).to.be.a("string").which.equals(value);
+    });
+});
+
+Then<TokenWorld>("the tokens and types should be:", function(table: DataTable) {
+    table.hashes().map(({ value, type }, i) => {
+        expect(this.tokenInstances[i].value).to.be.a(type).which.equals(JSON.parse(value));
     });
 });
 
