@@ -5,7 +5,7 @@ import { TokenType } from "../enums/TokenType";
 
 export abstract class Token<
     T1 extends TokenType,
-    T2 extends T1 extends TokenType.VALUE ? ValueType : ValueType.STRING = T1 extends TokenType.VALUE ? never : ValueType.STRING
+    T2 extends ValueType = T1 extends TokenType.VALUE ? never : ValueType.STRING
 > {
 
     public readonly type: T1;
@@ -31,7 +31,7 @@ export abstract class Token<
 
     protected abstract parse(data: TrimmedDataReader): ValueTypeToType<T2> | undefined;
 
-    public test(): this is Token<T1, T2> & { value: T2 extends ValueType ? ValueTypeToType<T2> : string } {
+    public test(): this is Token<T1, T2> & { value: ValueTypeToType<T2> } {
         return typeof this.value != "undefined";
     }
 }

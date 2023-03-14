@@ -1,13 +1,13 @@
-import { TokenType } from "../enums/TokenType";
-import { TokenValue } from "../types/TokenValue";
-import { TrimmedDataReader } from "../utils/TrimmedDataReader";
-import { Token } from "./Token";
+import type { TrimmedDataReader } from "../utils/TrimmedDataReader";
+import type { TokenType } from "../enums/TokenType";
+import type { ValueType } from "../enums/ValueType";
+import type { Token } from "./Token";
 
 export abstract class StreamToken {
 
-    protected abstract [Symbol.iterator](): Iterator<Token<TokenType, TokenValue>>;
+    protected abstract [Symbol.iterator](): Iterator<Token<TokenType, ValueType>>;
 
-    public readonly tokens: Token<TokenType, TokenValue>[];
+    public readonly tokens: Token<TokenType, ValueType>[];
 
     protected readonly data: TrimmedDataReader;
 

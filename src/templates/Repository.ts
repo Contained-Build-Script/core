@@ -1,7 +1,7 @@
 import type { TrimmedDataReader } from "../utils/TrimmedDataReader";
 import type { DynamicClass } from "../types/DynamicClass";
-import type { TokenValue } from "../types/TokenValue";
 import type { TokenType } from "../enums/TokenType";
+import type { ValueType } from "../enums/ValueType";
 import type { Token } from "./Token";
 
 export class Repository<T extends TokenType> {
@@ -12,13 +12,13 @@ export class Repository<T extends TokenType> {
         return <T | void>this.instances.get(repo);
     }
 
-    public readonly tokens: DynamicClass<Token<T, TokenValue>>[];
+    public readonly tokens: DynamicClass<Token<T, ValueType>>[];
 
-    constructor(data: TrimmedDataReader, ...tokens: DynamicClass<Token<T, TokenValue>, [TrimmedDataReader]>[]) {
+    constructor(data: TrimmedDataReader, ...tokens: DynamicClass<Token<T, ValueType>, [TrimmedDataReader]>[]) {
         this.tokens = tokens.map((token) => token.bind(null, data));
     }
 
-    public attemptTokens(): Token<T, TokenValue> | void {
+    public attemptTokens(): Token<T, ValueType> | void {
         for (const token of this.tokens) {
             const instance = new token();
  
