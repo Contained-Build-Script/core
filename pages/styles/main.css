@@ -1,0 +1,222 @@
+@import url("cbs.css");
+
+:root {
+    --background: #0D1117;
+    --background-secondary: #161B22;
+    --background-nav: #262F3B;
+    --text: #C9D1D9;
+    --text-secondary: #8C979F;
+    --link: #58A6F0;
+    --link-highlight: #6B61A9;
+    --highlight: #343942;
+    --highlight-hover: #464E5B;
+    --highlight-active: #5A6475;
+    --border: #393C41;
+}
+
+::-webkit-scrollbar {
+    width: 12px;
+}
+
+::-webkit-scrollbar-track {
+    background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: var(--highlight);
+    border-radius: 12px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: var(--highlight-hover);
+}
+
+::-webkit-scrollbar-thumb:active {
+    background-color: var(--highlight-active);
+}
+
+*, *::before, *::after {
+    box-sizing: border-box;
+    font-family: sans-serif;
+}
+
+*:is(h1, h2, h3) .link {
+    position: absolute;
+    left: -20px;
+    font-size: 13px;
+    opacity: 0;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+*:is(h1, h2, h3):is(:hover, :focus) .link {
+    opacity: 1;
+}
+
+body {
+    background-color: var(--background);
+    color: var(--text);
+    margin: 0;
+}
+
+a {
+    color: var(--link);
+    text-decoration: none;
+}
+
+a:is(:hover, :focus) {
+    text-decoration: underline;
+}
+
+h1, h2 {
+    border-bottom: 1px solid var(--border);
+    padding: 10px 0;
+}
+
+h1, h2, h3 {
+    position: relative;
+    margin: 0;
+    margin: 0.8em 0;
+    cursor: pointer;
+}
+
+code {
+    background-color: var(--highlight);
+    padding: 2px 5px;
+    border-radius: 5px;
+}
+
+pre:has(code) {
+    background-color: var(--background-secondary);
+    padding: 10px;
+    border-radius: 5px;
+}
+
+pre code {
+    background-color: transparent;
+    padding: 0;
+    border-radius: 0;
+}
+
+table {
+    width: 100%;
+    border: 1px solid var(--border);
+    border-collapse: collapse;
+}
+
+tr:nth-child(even) {
+    background-color: var(--background-secondary);
+}
+
+td, th {
+    border: 1px solid var(--border);
+    padding: 15px;
+    text-align: left;
+}
+
+#content {
+    position: fixed;
+    display: none;
+    top: 40px;
+    left: 0;
+    right: 0;
+    height: calc(100vh - 40px);
+    padding: 0 30px 30px 30px;
+    line-height: 1.5em;
+    overflow-y: auto;
+}
+
+#nav {
+    position: fixed;
+    top: 0; 
+    bottom: 0;
+    left: -280px;
+    width: 280px;
+    background-color: var(--background-nav);
+    padding: 0 20px;
+    transition: left 0.5s;
+    z-index: 1;
+}
+
+#nav.open {
+    left: 0;
+}
+
+#nav h2 {
+    border-bottom: 1px solid var(--highlight-active);
+    margin: 0;
+    padding: 20px 0 0 0;
+}
+
+#nav details {
+    padding-left: 10px;
+    user-select: none;
+}
+
+#nav > details {
+    padding: 10px;
+}
+
+#nav details summary {
+    padding: 5px;
+    cursor: pointer;
+    transition: 0.5s;
+}
+
+#nav details[open] summary, #nav details[open] > a.highlight {
+    background-color: var(--link-highlight);
+    border-radius: 5px;
+}
+
+#nav details > a {
+    display: block;
+    padding: 5px;
+    margin: 5px 15px;
+    transition: 0.5s;
+}
+
+#nav a {
+    color: var(--text-secondary);
+}
+
+#nav a:is(:hover, :focus), #nav a.highlight, #nav details[open] summary a {
+    color: var(--text);
+    text-decoration: none;
+}
+
+#menu-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 40px;
+    background-color: var(--background-secondary);
+    padding: 7px 15px;
+    transition: 0.5s;
+}
+
+#menu-bar.open {
+    left: 280px;
+}
+
+#menu-bar .menu {
+    font-size: 26px;
+    cursor: pointer;
+}
+
+@media only screen and (min-width: 1200px) {
+    #content {
+        top: 0;
+        left: 280px;
+        height: 100vh;
+        padding-top: 0;
+    }
+
+    #menu-bar {
+        display: none;
+    }
+
+    #nav {
+        left: 0;
+    }
+}
