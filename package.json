@@ -6,7 +6,8 @@
   "scripts": {
     "build": "tsc",
     "pretest": "mkdirp pages/test-results",
-    "test": "cucumber-js"
+    "test": "cucumber-js",
+    "wiki": "ts-node ./generators/generate-wiki.ts ./wiki ./pages ./resources/index.html"
   },
   "keywords": [],
   "author": "SMJS",
