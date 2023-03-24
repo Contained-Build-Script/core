@@ -40,8 +40,10 @@ jobs:
         with:
           node-version: latest
           cache: npm
-      - run: npm ci
-      - run: npm run build
+      - name: Download all dependencies
+        run: npm ci
+      - name: Build the project
+        run: npm run build
 
   test:
     name: Test the project
@@ -55,22 +57,58 @@ jobs:
         with:
           node-version: latest
           cache: npm
-      - run: npm ci
-      - run: npm test
-      - name: Uploading test page artifact
+      - name: Download all dependencies
+        run: npm ci
+      - name: Run tests
+        run: npm test
+      - name: Uploading the test page artifact
         if: success() || failure()
         uses: actions/upload-artifact@v3
         with:
           name: test-results
           path: './pages/test-results/index.html'
           retention-days: 1
+          
+  wiki:
+    name: Upload wiki pages
+    if: ${{ github.event_name != 'pull_request' || github.event.pull_request.merged == true }}
+
+    # Consider the wiki invalid if either of these aren't functional
+    needs:
+      - test
+      - build
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: latest
+          cache: npm
+      - name: Download all dependencies
+        run: npm ci
+      - name: Publish wiki
+        uses: SwiftDocOrg/github-wiki-publish-action@1.0.0
+        with:
+          path: './wiki'
+      - name: Build the wiki pages
+        run: npm run wiki
+      - name: Uploading the wiki artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: wiki
+          path: './pages/**'
+          retention-days: 1
 
   pages:
     name: Deploy the artifacts to GitHub Pages
-    if: ${{ github.event_name != 'pull_request' || github.event.pull_request.merged == true }}
+    if: always() && (github.event_name != 'pull_request' || github.event.pull_request.merged == true)
 
     needs:
       - test
+      - wiki
 
     environment:
       name: github-pages
