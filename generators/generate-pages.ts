@@ -3,7 +3,7 @@ import type { WikiPage } from "./interfaces/WikiPage";
 import { readFileSync, readdirSync, statSync, mkdirSync, existsSync, writeFileSync, copyFileSync } from "fs";
 import { join, basename, extname } from "path";
 
-class GenerateWiki {
+class GeneratePages {
 
     private readonly basePath: string;
     
@@ -127,7 +127,7 @@ class GenerateWiki {
 const truncatedArgs = process.argv.slice(2);
 
 if (truncatedArgs.length == 3 && truncatedArgs.every(existsSync)) {
-    new GenerateWiki(...<[string, string, string]>truncatedArgs).build();
+    new GeneratePages(...<[string, string, string]>truncatedArgs).build();
 } else if (truncatedArgs[0] == "--help" || truncatedArgs[0] == "-h" || truncatedArgs[0] == "/?") {
     console.info("Usage: generate-wiki <wiki path> <target path> <template path>");
 } else {
