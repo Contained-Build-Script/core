@@ -5,3 +5,4 @@ node_modules/
 # Generated pages
 pages/**/*.html
 pages/favicon.ico
+pages/cbs.png

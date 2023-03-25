@@ -7,7 +7,7 @@ class GeneratePages {
 
     private readonly basePath: string;
     
-    private readonly targetPath: string;
+    private readonly iconPath: string;
 
     private readonly nav: string[];
 
@@ -15,29 +15,34 @@ class GeneratePages {
 
     private readonly template: string;
     
-    constructor(basePath: string, targetPath: string, templatePath: string) {
+    constructor(basePath: string, templatePath: string, iconPath: string) {
         this.basePath = basePath;
-        this.targetPath = targetPath;
+        this.iconPath = iconPath;
         this.nav = [];
         this.pages = this.exploreDirectory();
         this.template = readFileSync(templatePath, "utf8").replace(/{{nav}}/g, this.nav.join(""));
     }
 
-    public build(): void {
+    public build(targetPath: string): void {
         const favIconPath = join(this.basePath, "favicon.ico");
 
-        this.buildRecursively({
+        this.buildRecursively(targetPath, {
             path: ".",
             pages: this.pages
         });
 
-        if (existsSync(favIconPath)) {
-            copyFileSync(favIconPath, join(this.targetPath, "favicon.ico"));
+        console.info("Copying additional resources...");
+
+        if (existsSync(favIconPath) && existsSync(this.iconPath)) {
+            copyFileSync(favIconPath, join(targetPath, "favicon.ico"));
+            copyFileSync(this.iconPath, join(targetPath, "cbs.png"));
+        } else {
+            throw new Error("Favicon or CBS image not found");
         }
     }
 
-    private buildRecursively({ path, pages }: WikiDirectory, depth = 0): void {
-        const outputPath = join(this.targetPath, path);
+    private buildRecursively(targetPath: string, { path, pages }: WikiDirectory, depth = 0): void {
+        const outputPath = join(targetPath, path);
 
         // First create the directory to avoid errors
         if (!existsSync(outputPath)) {
@@ -46,11 +51,11 @@ class GeneratePages {
 
         pages.forEach((page) => {
             if ("pages" in page) {
-                this.buildRecursively(page, depth + 1);
+                this.buildRecursively(targetPath, page, depth + 1);
             } else {
                 const fullPath = join(outputPath, page.fileName);
 
-                console.log(`Building ${fullPath}`);
+                console.info(`Building ${fullPath}`);
 
                 writeFileSync(fullPath,this.template.replace(/{{content}}/g, page.content)
                     .replace(/{{title}}/g, page.titles[0])
@@ -126,10 +131,10 @@ class GeneratePages {
 
 const truncatedArgs = process.argv.slice(2);
 
-if (truncatedArgs.length == 3 && truncatedArgs.every(existsSync)) {
-    new GeneratePages(...<[string, string, string]>truncatedArgs).build();
+if (truncatedArgs.length == 4 && truncatedArgs.every(existsSync)) {
+    new GeneratePages(truncatedArgs[0], truncatedArgs[1], truncatedArgs[2]).build(truncatedArgs[3]);
 } else if (truncatedArgs[0] == "--help" || truncatedArgs[0] == "-h" || truncatedArgs[0] == "/?") {
-    console.info("Usage: generate-wiki <wiki path> <target path> <template path>");
+    console.info("Usage: generate-wiki <wiki path> <template path> <icon path> <target path>");
 } else {
-    console.error("Invalid arguments, expecting 3 paths: wiki path, target path, template path");
+    console.error("Invalid arguments, expecting 3 paths: wiki path, template path, icon path, target path");
 }

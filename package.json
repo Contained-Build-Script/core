@@ -7,7 +7,7 @@
     "build": "tsc",
     "pretest": "mkdirp pages/test-results",
     "test": "cucumber-js",
-    "pages": "ts-node ./generators/generate-pages.ts ./md ./pages ./resources/index.html"
+    "pages": "ts-node ./generators/generate-pages.ts ./md ./resources/index.html ./resources/cbs.png ./pages"
   },
   "keywords": [],
   "author": "SMJS",
