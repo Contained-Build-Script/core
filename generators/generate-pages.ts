@@ -56,7 +56,7 @@ class GeneratePages {
             if (files.some(({ fileName }) => fileName == "Home.html")) {
                 writeFileSync(indexPath, this.buildPage(`<script>
                     location.href = location.href.split("/").slice(0, -1).join("/") + "/Home.html";
-                </script>`, "Redirecting...", depth));
+                </script>`, "Home", depth));
             } else {
                 writeFileSync(indexPath, this.buildPage("", "Index", depth));
             }
