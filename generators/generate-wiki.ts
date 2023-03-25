@@ -1,7 +1,7 @@
 import type { WikiDirectory } from "./interfaces/WikiDirectory";
 import type { WikiPage } from "./interfaces/WikiPage";
-import { readFileSync, readdirSync, statSync, mkdirSync, existsSync, writeFileSync } from "fs";
-import { join, basename } from "path";
+import { readFileSync, readdirSync, statSync, mkdirSync, existsSync, writeFileSync, copyFileSync } from "fs";
+import { join, basename, extname } from "path";
 
 class GenerateWiki {
 
@@ -24,10 +24,16 @@ class GenerateWiki {
     }
 
     public build(): void {
+        const favIconPath = join(this.basePath, "favicon.ico");
+
         this.buildRecursively({
             path: ".",
             pages: this.pages
         });
+
+        if (existsSync(favIconPath)) {
+            copyFileSync(favIconPath, join(this.targetPath, "favicon.ico"));
+        }
     }
 
     private buildRecursively({ path, pages }: WikiDirectory, depth = 0): void {
@@ -62,14 +68,20 @@ class GenerateWiki {
             return {
                 fileName,
                 filePath,
-                stat: statSync(filePath)
+                isDir: statSync(filePath).isDirectory()
             };
-        }).sort((a, b) => +a.stat.isDirectory() - +b.stat.isDirectory()).map(({ fileName, filePath, stat }) => {
-
+        }).filter(({
+            fileName,
+            isDir
+        }) => isDir || extname(fileName) == ".md").sort((a, b) => +a.isDir - +b.isDir).map(({
+            fileName,
+            filePath,
+            isDir
+        }) => {
             console.info(`Exploring ${filePath}`);
             this.nav.push("<details>");
 
-            if (stat.isDirectory()) {
+            if (isDir) {
                 this.nav.push(`<summary><b>${fileName}</b></summary>`);
 
                 // Has to be done in this order, otherwise the nav items are misaligned
@@ -90,9 +102,13 @@ class GenerateWiki {
                 }).replace(/```ts(?=(?:\s|.)*?```)/g, "```cbs");
                 const titles = [...content.matchAll(/^#+\s(.*?)$/gm)].map(([_, title]) => title);
 
-                this.nav.push(`<summary>${this.createUrl(targetPath, titles[0])}</summary>`);
-                this.nav.push(...titles.slice(1).map((title) => this.createUrl(targetPath, title)));
-                this.nav.push("</details>");
+                if (titles.length) {
+                    this.nav.push(`<summary>${this.createUrl(targetPath, titles[0])}</summary>`);
+                    this.nav.push(...titles.slice(1).map((title) => this.createUrl(targetPath, title)));
+                    this.nav.push("</details>");
+                } else {
+                    this.nav.splice(-1, 1);
+                }
 
                 return {
                     fileName: renamedFile,
