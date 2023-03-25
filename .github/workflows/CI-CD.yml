@@ -119,16 +119,16 @@ jobs:
         with:
           path: './pages'
       - name: Move the wiki to root
-        run: mv ./pages/wiki/* ./pages
+        run: cp -r ./pages/wiki/* ./pages && rm -R ./pages/wiki/*
+      - name: Show all files
+        run: ls -R
+        working-directory: './pages'
       - name: Setup Pages
         uses: actions/configure-pages@v3
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
         with:
           path: './pages'
-      - name: Show all files
-        run: ls -R
-        working-directory: './pages'
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v1
