@@ -69,11 +69,11 @@ jobs:
           path: './pages/test-results/index.html'
           retention-days: 1
           
-  wiki:
-    name: Upload wiki pages
+  generate-pages:
+    name: Upload pages
     if: github.event_name != 'pull_request' || github.event.pull_request.merged == true
 
-    # Consider the wiki invalid if either of these aren't functional
+    # Consider the pages invalid if either of these aren't functional
     needs:
       - test
       - build
@@ -89,12 +89,12 @@ jobs:
           cache: npm
       - name: Download all dependencies
         run: npm ci
-      - name: Build the wiki pages
-        run: npm run wiki
-      - name: Uploading the wiki artifact
+      - name: Build the pages
+        run: npm run pages
+      - name: Uploading the pages artifact
         uses: actions/upload-artifact@v3
         with:
-          name: wiki
+          name: pages
           path: './pages/**'
           retention-days: 1
 
@@ -104,7 +104,7 @@ jobs:
 
     needs:
       - test
-      - wiki
+      - generate-pages
 
     environment:
       name: github-pages
@@ -118,8 +118,8 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           path: './pages'
-      - name: Move the wiki to root
-        run: cp -r ./pages/wiki/* ./pages && rm -rf ./pages/wiki/
+      - name: Move the pages to root
+        run: cp -r ./pages/pages/* ./pages && rm -rf ./pages/pages/
       - name: Show all files
         run: ls -R
         working-directory: './pages'
