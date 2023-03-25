@@ -9,6 +9,7 @@ function recursiveDetailOpen(element) {
     if (element && element.tagName == "DETAILS") {
         // @ts-ignore
         element.open = true;
+        element.getElementsByTagName("summary")[0].classList.add("highlight");
 
         recursiveDetailOpen(element.parentElement);
     }
@@ -18,16 +19,21 @@ function recursiveDetailOpen(element) {
  * @returns {void}
  */
 function highlightCurrent() {
-    const location = document.querySelector(`a[href$="${window.location.hash}"]`) ?? document.querySelector(`a[href$="${
-        decodeURI(window.location.pathname.match(/[^\/]+?(?=\..*?$)/)?.[0] ?? "").replace(/\s+/g, "-").toLowerCase()
-    }"]`);
-    
+    const decoded = decodeURI(window.location.href);
+    const location = document.querySelector(`a[href="${decoded}"]`) ?? document.querySelector(`a[href^="${decoded.split("#")[0]}"]`);
+
     [...document.getElementsByClassName("highlight")].forEach((element) => element.classList.remove("highlight"));
 
     if (location) {
-        location.classList.add("highlight");
+        if (location.parentElement?.tagName == "SUMMARY") {
+            location.parentElement.classList.add("highlight");
 
-        recursiveDetailOpen(location.parentElement?.tagName == "SUMMARY" ? location.parentElement.parentElement : location.parentElement);
+            recursiveDetailOpen(location.parentElement.parentElement);
+        } else {
+            location.classList.add("highlight");
+
+            recursiveDetailOpen(location.parentElement);
+        }
     }
 }
 
@@ -46,53 +52,59 @@ function highlightCurrent() {
     });
 }
 
+const nav = document.getElementById("nav");
 const menu = document.createElement("span");
 const menuBar = document.createElement("div");
 const content = document.getElementById("content");
+const baseURL = `${location.protocol}//${location.host}${location.pathname.split(/\/+/).slice(0, 2).join("/")}`;
 
-menu.innerHTML = "<i class=\"fa-solid fa-bars\"></i>";
+if (!nav || !content) {
+    throw new Error("Missing elements");
+}
+
 menuBar.id = "menu-bar";
+menu.innerHTML = "<i class=\"fa-solid fa-bars\"></i>";
+content.innerHTML = restoreSymbols(window.marked.parse(content.innerHTML));
 
 menu.classList.add("menu");
-menu.addEventListener("click", () => {
-    document.getElementById("nav")?.classList.toggle("open");
-    document.getElementById("menu-bar")?.classList.toggle("open");
-});
 menuBar.appendChild(menu);
 document.body.appendChild(menuBar);
 
-window.addEventListener("hashchange", highlightCurrent);
-
-
-if (content) {
-    window.addEventListener("load", () => {
-        content.style.display = "block";
-
-        highlightCurrent();
-    });
-
-    content.innerHTML = restoreSymbols(window.marked.parse(content.innerHTML));
-
-    for (let i = 1; i <= 3; i++) {
-        [...content.getElementsByTagName(`h${i}`)].forEach((element) => {
-            const link = document.createElement("span");
-    
-            link.innerHTML = "<i class=\"fa-solid fa-link\"></i>";
-            link.classList.add("link");
-            element.addEventListener("click", () => location.href = `#${element.id}`);
-            element.appendChild(link);
-
-            if (element.id) {
-                element.id = `${document.title.split(" - ")[1].toLowerCase()}-${element.id}`;
-            }
-        });
+[...nav.getElementsByTagName("a")].forEach((element) => element.href = `${baseURL}/${element.getAttribute("href")?.replace(/\\/g, "/")}`);
+[...content.getElementsByClassName("language-cbs")].forEach((element) => {
+    try {
+        element.innerHTML = new CBSHighlighter(restoreSymbols(element.innerHTML)).parse();
+    } catch (error) {
+        console.error(error);
     }
+});
 
-    [...content.getElementsByClassName("language-cbs")].forEach((element) => {
-        try {
-            element.innerHTML = new CBSHighlighter(restoreSymbols(element.innerHTML)).parse();
-        } catch (error) {
-            console.error(error);
+window.addEventListener("hashchange", highlightCurrent);
+window.addEventListener("load", () => {
+    content.style.display = "block";
+
+    highlightCurrent();
+});
+menu.addEventListener("click", () => {
+    nav?.classList.toggle("open");
+    menuBar.classList.toggle("open");
+});
+
+for (let i = 1; i <= 3; i++) {
+    [...content.getElementsByTagName(`h${i}`)].forEach((element) => {
+        const link = document.createElement("span");
+
+        link.innerHTML = "<i class=\"fa-solid fa-link\"></i>";
+        link.classList.add("link");
+        element.addEventListener("click", () => location.href = `#${element.id}`);
+        element.appendChild(link);
+
+        if (element.id) {
+            element.id = `${document.title.split(" - ").slice(1).join(" - ").toLowerCase()}-${element.id}`;
         }
     });
+}
+
+if (location.hash.slice(1) == content.getElementsByTagName("h1")[0].id) {
+    location.hash = "";
 }

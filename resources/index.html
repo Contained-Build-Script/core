@@ -6,15 +6,16 @@
     <meta property="og:title" content="{{title}}">
     <meta property="og:type" content="website">
     <meta property="og:locale" content="en_US">
+    <meta property="og:image" content="./{{depth}}favicon.ico">
     <meta property="og:description" content="The Contained Build Script documentations where you can find everything you need to know about CBS.">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CBS Documentations - {{title}}</title>
     <script src="https://kit.fontawesome.com/dad1e91d86.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <script defer src="./scripts/cbs.js"></script>
-    <script defer src="./scripts/main.js"></script>
-    <link rel="stylesheet" href="./styles/main.css">
-    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <script defer src="./{{depth}}scripts/cbs.js"></script>
+    <script defer src="./{{depth}}scripts/main.js"></script>
+    <link rel="stylesheet" href="./{{depth}}styles/main.css">
+    <link rel="icon" type="image/x-icon" href="./{{depth}}favicon.ico">
 </head>
 <body>
     <div id="nav"><h2>{{title}}</h2>{{nav}}</div>

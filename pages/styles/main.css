@@ -16,6 +16,7 @@
 
 ::-webkit-scrollbar {
     width: 12px;
+    height: 12px;
 }
 
 ::-webkit-scrollbar-track {
@@ -46,7 +47,7 @@
     font-size: 13px;
     opacity: 0;
     cursor: pointer;
-    transition: 0.2s;
+    transition: 0.5s;
 }
 
 *:is(h1, h2, h3):is(:hover, :focus) .link {
@@ -75,8 +76,7 @@ h1, h2 {
 
 h1, h2, h3 {
     position: relative;
-    margin: 0;
-    margin: 0.8em 0;
+    margin: 20px 0;
     cursor: pointer;
 }
 
@@ -90,6 +90,7 @@ pre:has(code) {
     background-color: var(--background-secondary);
     padding: 10px;
     border-radius: 5px;
+    overflow-x: auto;
 }
 
 pre code {
@@ -133,9 +134,10 @@ td, th {
     left: -280px;
     width: 280px;
     background-color: var(--background-nav);
-    padding: 0 20px;
-    transition: left 0.5s;
+    padding: 0 20px 20px 20px;
+    transition: 0.5s;
     z-index: 1;
+    overflow-y: auto;
 }
 
 #nav.open {
@@ -149,21 +151,18 @@ td, th {
 }
 
 #nav details {
+    margin: 5px 0;
     padding-left: 10px;
     user-select: none;
-}
-
-#nav > details {
-    padding: 10px;
 }
 
 #nav details summary {
     padding: 5px;
     cursor: pointer;
-    transition: 0.5s;
 }
 
-#nav details[open] summary, #nav details[open] > a.highlight {
+#nav details > summary.highlight,
+#nav details > a.highlight {
     background-color: var(--link-highlight);
     border-radius: 5px;
 }
@@ -172,14 +171,17 @@ td, th {
     display: block;
     padding: 5px;
     margin: 5px 15px;
-    transition: 0.5s;
 }
 
 #nav a {
     color: var(--text-secondary);
+    transition: 0.5s;
 }
 
-#nav a:is(:hover, :focus), #nav a.highlight, #nav details[open] summary a {
+#nav a:is(:hover, :focus),
+#nav a.highlight,
+#nav details > summary.highlight a,
+#nav details[open] > summary a {
     color: var(--text);
     text-decoration: none;
 }
@@ -204,7 +206,7 @@ td, th {
     cursor: pointer;
 }
 
-@media only screen and (min-width: 1200px) {
+@media only screen and (min-width: 1000px) {
     #content {
         top: 0;
         left: 280px;

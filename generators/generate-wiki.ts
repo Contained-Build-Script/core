@@ -1,5 +1,6 @@
 import type { WikiDirectory } from "./interfaces/WikiDirectory";
 import type { WikiPage } from "./interfaces/WikiPage";
+// @ts-ignore
 import { readFileSync, readdirSync, statSync, mkdirSync, existsSync, writeFileSync } from "fs";
 import { join, basename } from "path";
 
@@ -13,6 +14,7 @@ class GenerateWiki {
 
     private readonly pages: Array<WikiPage | WikiDirectory>;
 
+    // @ts-ignore
     private readonly template: string;
     
     constructor(basePath: string, targetPath: string, templatePath: string) {
@@ -20,15 +22,17 @@ class GenerateWiki {
         this.targetPath = targetPath;
         this.nav = [];
         this.pages = this.exploreDirectory();
-        this.template = readFileSync(templatePath, "utf8").replace("{{nav}}", this.nav.join(""));
+        this.template = readFileSync(templatePath, "utf8").replace(/{{nav}}/g, this.nav.join(""));
     }
 
     public build(): void {
-        // Doing this to avoid exposing an internal parameter
-        this.buildRecursively();
+        this.buildRecursively({
+            path: ".",
+            pages: this.pages
+        });
     }
 
-    private buildRecursively(path = "."): void {
+    private buildRecursively({ path, pages }: WikiDirectory, depth = 0): void {
         const outputPath = join(this.targetPath, path);
 
         // First create the directory to avoid errors
@@ -36,43 +40,54 @@ class GenerateWiki {
             mkdirSync(outputPath, { recursive: true });
         }
 
-        this.pages.forEach((page) => {
+        pages.forEach((page) => {
             if ("pages" in page) {
-                this.buildRecursively(join(path, page.path));
+                this.buildRecursively(page, depth + 1);
             } else {
                 const fullPath = join(outputPath, page.fileName);
 
                 console.log(`Building ${fullPath}`);
 
-                writeFileSync(fullPath, this.template.replace("{{content}}", page.content).replace(/{{title}}/g, page.titles[0]));
+                writeFileSync(fullPath,this.template.replace(/{{content}}/g, page.content)
+                    .replace(/{{title}}/g, page.titles[0])
+                    .replace(/{{depth}}/g, "../".repeat(depth)));
             }
         });
     }
 
     private exploreDirectory(path = "."): Array<WikiPage | WikiDirectory> {
-        return readdirSync(this.basePath).map((fileName) => {
-            const filePath = join(path, fileName);
-            const fullPath = join(this.basePath, filePath);
+        const explorePath = join(this.basePath, path);
 
-            console.info(`Exploring ${fullPath}`);
+        return readdirSync(explorePath).map((fileName) => {
+            const filePath = join(explorePath, fileName);
+
+            return {
+                fileName,
+                filePath,
+                stat: statSync(filePath)
+            };
+        }).sort((a, b) => +a.stat.isDirectory() - +b.stat.isDirectory()).map(({ fileName, filePath, stat }) => {
+
+            console.info(`Exploring ${filePath}`);
             this.nav.push("<details>");
 
-            if (statSync(fullPath).isDirectory()) {
+            if (stat.isDirectory()) {
                 this.nav.push(`<summary><b>${fileName}</b></summary>`);
 
                 // Has to be done in this order, otherwise the nav items are misaligned
+                const fullPath = join(path, fileName);
                 const pages = this.exploreDirectory(fullPath);
 
                 this.nav.push("</details>");
 
                 return {
-                    path: fileName,
+                    path: fullPath,
                     pages
                 };
             } else {
                 const renamedFile = fileName.replace(/\.md$/, ".html");
                 const targetPath = join(path, renamedFile);
-                const content = readFileSync(fullPath, "utf8").replace(/(\[[^\]]+?]\([^)]*?([^\/)]+?))\.md(?:#(.*?))?(?=\s*\))/g, (_, url, file, hash) => {
+                const content = readFileSync(filePath, "utf8").replace(/(\[[^\]]+?]\([^)]*?([^\/)]+?))\.md(?:#(.*?))?(?=\s*\))/g, (_, url, file, hash) => {
                     return `${url}.html${hash ? `#${file.toLowerCase().replace(/\s+/g, "-")}-${hash}` : ""}`;
                 }).replace(/```ts(?=(?:\s|.)*?```)/g, "```cbs");
                 const titles = [...content.matchAll(/^#+\s(.*?)$/gm)].map(([_, title]) => title);
@@ -87,7 +102,7 @@ class GenerateWiki {
                     content
                 };
             }
-        });
+        }).filter((page) => page);
     }
 
     private createUrl(filePath: string, title: string): string {
