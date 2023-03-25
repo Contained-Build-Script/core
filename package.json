@@ -7,7 +7,7 @@
     "build": "tsc",
     "pretest": "mkdirp pages/test-results",
     "test": "cucumber-js",
-    "wiki": "ts-node ./generators/generate-wiki.ts ./wiki ./pages ./resources/index.html"
+    "wiki": "ts-node ./generators/generate-wiki.ts ./md ./pages ./resources/index.html"
   },
   "keywords": [],
   "author": "SMJS",
