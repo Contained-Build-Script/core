@@ -18,8 +18,10 @@ function recursiveDetailOpen(element) {
  * @returns {void}
  */
 function highlightCurrent() {
-    const location = document.querySelector(`a[href$="${window.location.hash}"]`);
-
+    const location = document.querySelector(`a[href$="${window.location.hash}"]`) ?? document.querySelector(`a[href$="${
+        decodeURI(window.location.pathname.match(/[^\/]+?(?=\..*?$)/)?.[0] ?? "").replace(/\s+/g, "-").toLowerCase()
+    }"]`);
+    
     [...document.getElementsByClassName("highlight")].forEach((element) => element.classList.remove("highlight"));
 
     if (location) {
@@ -33,7 +35,7 @@ function highlightCurrent() {
  * @param {string} html
  * @returns {string}
  */
-function restoreSymbols(html) {
+ function restoreSymbols(html) {
     return html.replace(/(&(?:\w+|\d+);)/g, (entity) => {
         const textarea = document.createElement("textarea");
 
@@ -86,7 +88,11 @@ if (content) {
         });
     }
 
-    [
-        ...content.getElementsByClassName("language-cbs")
-    ].forEach((element) => element.innerHTML = new CBSHighlighter(restoreSymbols(element.innerHTML)).parse());
+    [...content.getElementsByClassName("language-cbs")].forEach((element) => {
+        try {
+            element.innerHTML = new CBSHighlighter(restoreSymbols(element.innerHTML)).parse();
+        } catch (error) {
+            console.error(error);
+        }
+    });
 }
