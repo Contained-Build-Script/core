@@ -19,8 +19,15 @@ function recursiveDetailOpen(element) {
  * @returns {void}
  */
 function highlightCurrent() {
-    const decoded = decodeURI(window.location.href);
-    const location = document.querySelector(`a[href="${decoded}"]`) ?? document.querySelector(`a[href^="${decoded.split("#")[0]}"]`);
+    let location;
+
+    if (window.location.pathname.endsWith(".html") && !window.location.pathname.endsWith("/index.html")) {
+        const decoded = decodeURI(window.location.href);
+
+        location = document.querySelector(`a[href="${decoded}"]`) ?? document.querySelector(`a[href^="${decoded.split("#")[0]}"]`);
+    } else {
+        location = document.querySelector(`b[path="${decodeURI(window.location.href).split(/\/index\.html#.*?$/)[0]}"]`);
+    }
 
     [...document.getElementsByClassName("highlight")].forEach((element) => element.classList.remove("highlight"));
 
@@ -71,6 +78,7 @@ menuBar.appendChild(menu);
 document.body.appendChild(menuBar);
 
 [...nav.getElementsByTagName("a")].forEach((element) => element.href = `${baseURL}/${element.getAttribute("href")?.replace(/\\/g, "/")}`);
+[...nav.querySelectorAll("b[path]")].forEach((element) => element.setAttribute("path", `${baseURL}/${element.getAttribute("path")?.replace(/\\/g, "/")}/`));
 [...content.getElementsByClassName("language-cbs")].forEach((element) => {
     try {
         element.innerHTML = new CBSHighlighter(restoreSymbols(element.innerHTML)).parse();
@@ -105,6 +113,9 @@ for (let i = 1; i <= 3; i++) {
     });
 }
 
-if (location.hash.slice(1) == content.getElementsByTagName("h1")[0].id) {
-    location.hash = "";
+if (content.innerHTML == "") {
+    nav.style.left = "0";
+    nav.style.width = "100vw";
+} else if (location.hash.slice(1) == content.getElementsByTagName("h1")[0].id) {
+    location.href = location.href.split("#")[0];
 }

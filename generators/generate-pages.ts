@@ -43,10 +43,23 @@ class GeneratePages {
 
     private buildRecursively(targetPath: string, { path, pages }: WikiDirectory, depth = 0): void {
         const outputPath = join(targetPath, path);
+        const files = <WikiPage[]>pages.filter((page) => "fileName" in page);
 
         // First create the directory to avoid errors
         if (!existsSync(outputPath)) {
             mkdirSync(outputPath, { recursive: true });
+        }
+
+        if (!files.some(({ fileName }) => fileName == "index.html")) {
+            const indexPath = join(outputPath, "index.html");
+
+            if (files.some(({ fileName }) => fileName == "Home.html")) {
+                writeFileSync(indexPath, this.buildPage(`<script>
+                    location.href = location.href.split("/").slice(0, -1).join("/") + "/Home.html";
+                </script>`, "Redirecting...", depth));
+            } else {
+                writeFileSync(indexPath, this.buildPage("", "Index", depth));
+            }
         }
 
         pages.forEach((page) => {
@@ -57,9 +70,7 @@ class GeneratePages {
 
                 console.info(`Building ${fullPath}`);
 
-                writeFileSync(fullPath,this.template.replace(/{{content}}/g, page.content)
-                    .replace(/{{title}}/g, page.titles[0])
-                    .replace(/{{depth}}/g, "../".repeat(depth)));
+                writeFileSync(fullPath, this.buildPage(page.content, page.titles[0], depth));
             }
         });
     }
@@ -87,10 +98,11 @@ class GeneratePages {
             this.nav.push("<details>");
 
             if (isDir) {
-                this.nav.push(`<summary><b>${fileName}</b></summary>`);
+                const fullPath = join(path, fileName);
 
                 // Has to be done in this order, otherwise the nav items are misaligned
-                const fullPath = join(path, fileName);
+                this.nav.push(`<summary><b path="${fullPath}">${fileName}</b></summary>`);
+                
                 const pages = this.exploreDirectory(fullPath);
 
                 this.nav.push("</details>");
@@ -122,6 +134,10 @@ class GeneratePages {
                 };
             }
         }).filter((page) => page);
+    }
+
+    private buildPage(content: string, title: string, depth: number): string {
+        return this.template.replace(/{{content}}/g, content).replace(/{{title}}/g, title).replace(/{{depth}}/g, "../".repeat(depth));
     }
 
     private createUrl(filePath: string, title: string): string {
