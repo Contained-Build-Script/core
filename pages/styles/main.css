@@ -41,13 +41,26 @@
     font-family: sans-serif;
 }
 
+img[align="left"] {
+    max-width: 100px;
+    margin: 20px 10px 0 0;
+}
+
+img[align="left"] + h1 {
+    margin: 40px 20px 20px 110px;
+}
+
+img[align="left"] + h1 .link {
+    left: -130px;
+}
+
 *:is(h1, h2, h3) .link {
     position: absolute;
     left: -20px;
     font-size: 13px;
     opacity: 0;
     cursor: pointer;
-    transition: 0.5s;
+    transform: rotate(-190deg);
 }
 
 *:is(h1, h2, h3):is(:hover, :focus) .link {
