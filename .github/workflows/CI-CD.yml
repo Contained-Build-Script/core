@@ -119,7 +119,7 @@ jobs:
         with:
           path: './pages'
       - name: Move the wiki to root
-        run: cp -r ./pages/wiki/* ./pages && rm -R ./pages/wiki/*
+        run: cp -r ./pages/wiki/* ./pages && rm -rf ./pages/wiki/
       - name: Show all files
         run: ls -R
         working-directory: './pages'
