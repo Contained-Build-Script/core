@@ -9,12 +9,16 @@ class CBSHighlighter {
      */
     static parsers = [
         {
+            type: "comment",
+            matcher: /\/\/.*$|\/\*(\s|.)*?\*\//
+        },
+        {
             type: "text",
-            matcher: /[*+-/%!=]?=|\+\+|--|[\^&|]{1,2}|![&|]{2}?|~[&|]?|[<>]{1,2}|[;,:]|=>/
+            matcher: /[*+-/%!=]=?|\+\+|--|[\^&|]{1,2}|![&|]{2}?|~[&|]?|[<>]{1,2}|[;,:]|=>/
         },
         {
             type: "variable",
-            matcher: /#(?!\d)[^\s[\]{}()\\\/+\-%=!*^&|<>,.`"';:?]+/
+            matcher: /#(?!\d)[^\s[\]{}()\\\/+\-%=!*^&|<>,.`"';:?]+|#\*/
         },
         {
             type: "string",
@@ -23,10 +27,6 @@ class CBSHighlighter {
         {
             type: "number",
             matcher: /(?:-)?(?:0x[\da-f]+|0b[01]+|(?:(?:\d+)?\.)?\d+(?:e(?:[-+])?\d+)?)/
-        },
-        {
-            type: "comment",
-            matcher: /\/\/.*$|\/\*(\s|.)*?\*\//
         },
         {
             type: "constant",
@@ -67,7 +67,8 @@ class CBSHighlighter {
                 "continue",
                 "return",
                 "with",
-                "to"
+                "to",
+                "throw"
             ]
         },
         {
@@ -140,7 +141,7 @@ class CBSHighlighter {
             }
 
             if (originalI == i) {
-                throw new Error(`Failed to parse code at "${parsedCode.slice(i, i + 10)}}"`);
+                throw new Error(`Failed to parse code at "${parsedCode.slice(i, i + 30)}..."`);
             }
         }
 
