@@ -77,10 +77,10 @@ define const string #hello_message;
 define const boolean #is_universal = true;
 
 if (#is_universal) {
-  // Now the variable will permanently be "Hello Universe!"
-  #hello_message = "Hello Universe!";
+    // Now the variable will permanently be "Hello Universe!"
+    #hello_message = "Hello Universe!";
 } else {
-  #hello_message = "Hello World!";
+    #hello_message = "Hello World!";
 }
 
 // This will throw an error

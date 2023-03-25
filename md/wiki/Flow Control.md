@@ -20,11 +20,11 @@ If you want to chain multiple `if` statements together, you can use the `else if
 define const boolean #test = true;
 
 if (#test) {
-  execute("echo" with "test is true");
+    execute("echo" with "test is true");
 } else if (#test == false) {
-  execute("echo" with "test is false");
+    execute("echo" with "test is false");
 } else {
-  execute("echo" with "test is unset");
+    execute("echo" with "test is unset");
 }
 ```
 
@@ -50,36 +50,36 @@ The `break` statement is used to break out of the `switch` statement. If the `br
 define const string #test = "test";
 
 switch (#test) {
-  case "test": 
-    execute("echo" with "test is test");
-    break;
-  case "test2":
-    execute("echo" with "test is test2");
-    break;
-  default:
-    execute("echo" with "test is something else");
+    case "test": 
+        execute("echo" with "test is test");
+        break;
+    case "test2":
+        execute("echo" with "test is test2");
+        break;
+    default:
+        execute("echo" with "test is something else");
 }
 
 // Multiple cases
 switch (#test) {
-  case "test":
-  case "test2":
-    execute("echo" with "test is test or test2");
-    break;
-  default:
-    execute("echo" with "test is something else");
+    case "test":
+    case "test2":
+        execute("echo" with "test is test or test2");
+        break;
+    default:
+        execute("echo" with "test is something else");
 }
 
 // Fallthrough
 switch (#test) {
-  case "test":
-    execute("echo" with "test is test");
-  case "test2":
-    execute("echo" with "test is test2");
-    break;
-  default:
-    // This will be executed even though it does first match the test case
-    execute("echo" with "test is something else or test");
+    case "test":
+        execute("echo" with "test is test");
+    case "test2":
+        execute("echo" with "test is test2");
+        break;
+    default:
+        // This will be executed even though it does first match the test case
+        execute("echo" with "test is something else or test");
 }
 ```
 
@@ -94,8 +94,8 @@ define int #i = 0;
 define const int #goal = 10;
 
 while (#i < #goal) {
-  // This will be executed 10 times
-  #i++;
+    // This will be executed 10 times
+    #i++;
 }
 ```
 
@@ -123,17 +123,17 @@ Here you can define any expression that will be executed after each iteration. T
 
 ```ts
 for (define int #i = 0; #i < 10; #i++) {
-  // This will be executed 10 times
+    // This will be executed 10 times
 }
 
 // With multiple variables
 for (define int #i = 0, define const int #goal = 10; #i < #goal; #i++) {
-  // This will be executed 10 times
+    // This will be executed 10 times
 }
 
 // With multiple expressions
 for (define int #i = 0; #i < 10; #i += 2, #i--) {
-  // This will be executed 10 times
+    // This will be executed 10 times
 }
 ```
 
@@ -153,18 +153,18 @@ The `of` keyword is used to extract the elements from a string or list. This wil
 
 ```ts
 foreach (define const int #i in "test") {
-  // #i will be 0, 1, 2, 3
+    // #i will be 0, 1, 2, 3
 }
 
 foreach (define const string #c of "test") {
-  // #c will be "t", "e", "s", "t"
+    // #c will be "t", "e", "s", "t"
 }
 
 foreach (define const int #i in [1, 2, 3]) {
-  // #i will be 0, 1, 2
+    // #i will be 0, 1, 2
 }
 
 foreach (define const int #n of [1, 2, 3]) {
-  // #n will be 1, 2, 3
+    // #n will be 1, 2, 3
 }
 ```

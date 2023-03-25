@@ -12,7 +12,7 @@ print("Hello World!");
 // This will push the print function to the function list
 // function definitions are available in the entire scope
 define function print(define string #text) => string {
-  return execute("echo" with #text);
+    return execute("echo" with #text);
 }
 ```
 
@@ -30,7 +30,7 @@ print("Hello World!");
 
 // Even though no return is given, this will return null
 define function print(define string #text) => null {
-  execute("echo" with #text);
+    execute("echo" with #text);
 }
 ```
 
@@ -43,6 +43,6 @@ A function can have multiple arguments, to provide a function multiple arguments
 commandBuilder("echo", "Hello World!");
 
 define function commandBuilder(define string #command, define string #args) => command {
-  return #command with #args;
+    return #command with #args;
 }
 ```
