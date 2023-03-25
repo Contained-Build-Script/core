@@ -4,3 +4,4 @@ node_modules/
 
 # Generated pages
 pages/**/*.html
+pages/favicon.ico
