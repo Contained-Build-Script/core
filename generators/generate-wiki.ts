@@ -1,6 +1,5 @@
 import type { WikiDirectory } from "./interfaces/WikiDirectory";
 import type { WikiPage } from "./interfaces/WikiPage";
-// @ts-ignore
 import { readFileSync, readdirSync, statSync, mkdirSync, existsSync, writeFileSync } from "fs";
 import { join, basename } from "path";
 
@@ -14,7 +13,6 @@ class GenerateWiki {
 
     private readonly pages: Array<WikiPage | WikiDirectory>;
 
-    // @ts-ignore
     private readonly template: string;
     
     constructor(basePath: string, targetPath: string, templatePath: string) {
