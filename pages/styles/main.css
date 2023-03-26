@@ -135,7 +135,7 @@ td, th {
     left: 0;
     right: 0;
     height: calc(100vh - 40px);
-    padding: 0 30px 30px 30px;
+    padding: 0 30px 50px 30px;
     line-height: 1.5em;
     overflow-y: auto;
 }
@@ -147,7 +147,7 @@ td, th {
     left: -280px;
     width: 280px;
     background-color: var(--background-nav);
-    padding: 0 20px 20px 20px;
+    padding: 0 20px 50px 20px;
     transition: 0.5s;
     z-index: 1;
     overflow-y: auto;
