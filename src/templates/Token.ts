@@ -3,10 +3,7 @@ import type { ValueType } from "../enums/ValueType";
 import { TrimmedDataReader } from "../utils/TrimmedDataReader";
 import { TokenType } from "../enums/TokenType";
 
-export abstract class Token<
-    T1 extends TokenType,
-    T2 extends ValueType = T1 extends TokenType.VALUE ? never : ValueType.STRING
-> {
+export abstract class Token<T1 extends TokenType, T2 extends ValueType = T1 extends TokenType.VALUE ? never : ValueType.STRING> {
 
     public readonly type: T1;
 
