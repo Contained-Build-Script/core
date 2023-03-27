@@ -37,7 +37,7 @@ export class TrimmedDataReader {
                 return arg0;
             }
         } else {
-            const result = new RegExp(arg0.source, "y" + arg0.flags.replace(/[syg]/g, "")).exec(this.data.slice(this.index)) ?? false;
+            const result = new RegExp(arg0.source, "y" + arg0.flags.replace(/[syg]/g, "")).exec(this.data.slice(this.index));
 
             if (result) {
                 this.index += result[0].length;
