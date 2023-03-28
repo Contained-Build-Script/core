@@ -8,9 +8,9 @@ export class Repository<T extends TokenType> extends Array<DynamicClass<Token<T,
 
     private static readonly instances = new Map<DynamicClass<Repository<TokenType>>, Repository<TokenType>>();
 
-    public static getInstance<T1 extends Repository<TokenType>, T2 extends DynamicClass<T1>>(repo: T2): T1 {
+    public static getInstance<T1 extends Repository<TokenType>, T2 extends DynamicClass<T1, [TrimmedDataReader]>>(repo: T2, data: TrimmedDataReader): T1 {
         if (!this.instances.has(repo)) {
-            this.instances.set(repo, new repo());
+            this.instances.set(repo, new repo(data));
         }
 
         return <T1>this.instances.get(repo);
@@ -18,7 +18,7 @@ export class Repository<T extends TokenType> extends Array<DynamicClass<Token<T,
 
     private readonly data: TrimmedDataReader;
 
-    constructor(data: TrimmedDataReader, ...tokens: DynamicClass<Token<T, ValueType>, [TrimmedDataReader]>[]) {
+    protected constructor(data: TrimmedDataReader, ...tokens: DynamicClass<Token<T, ValueType>, [TrimmedDataReader]>[]) {
         super(...tokens);
 
         this.data = data;
