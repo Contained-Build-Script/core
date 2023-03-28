@@ -2,10 +2,11 @@ import type { TrimmedDataReader } from "../utils/TrimmedDataReader";
 import type { TokenType } from "../enums/TokenType";
 import type { ValueType } from "../enums/ValueType";
 import type { Token } from "./Token";
+import { Repository } from "./Repository";
 
 export abstract class StreamToken {
 
-    protected abstract [Symbol.iterator](): Iterator<Token<TokenType, ValueType>>;
+    protected abstract [Symbol.iterator](): Iterator<Token<TokenType, ValueType> | Repository<TokenType> | StreamToken | undefined>;
 
     public readonly tokens: Token<TokenType, ValueType>[];
 
@@ -21,8 +22,10 @@ export abstract class StreamToken {
         this.isValid = true;
 
         for (const token of this) {
-            if (token.test()) {
-                this.tokens.push(token);
+            const extractedToken = token instanceof Repository ? token.attemptTokens() : token;
+
+            if (extractedToken?.test()) {
+                this.tokens.push(extractedToken);
             } else {
                 this.data.revertToCheckpoint(checkpoint);
                 this.isValid = false;
