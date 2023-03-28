@@ -1,10 +1,10 @@
 export class TrimmedDataReader {
 
+    public index: number;
+
     private readonly checkpoints: number[];
     
     private readonly data: string;
-
-    private index: number;
 
     /**
      * @param data The data to read from.
@@ -82,6 +82,23 @@ export class TrimmedDataReader {
      */
     public followedByWhitespace(): boolean {
         return /\s+/y.test(this.data.slice(this.index + this.measureUnusedSpace(false)));
+    }
+
+    /**
+     * Throws a syntax error at the given index.
+     * @param index The index to throw the error at.
+     * @throws A syntax error.
+     */
+    public throwSyntaxError(index: number): never {
+        const padding = 20;
+        const before = this.data.slice(0, index);
+        const lines = before.split(/\r?\n/);
+
+        throw [
+            `Unexpected symbol on line ${lines.length}, col ${lines[lines.length - 1].length + 1}}`,
+            this.data.slice(index - padding, index + padding),
+            " ".repeat(padding) + "^"
+        ].join("\n");
     }
 
     private measureUnusedSpace(withWhitespace: boolean): number {
