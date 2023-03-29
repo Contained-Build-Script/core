@@ -89,7 +89,7 @@ export class TrimmedDataReader {
      * @param index The index to throw the error at.
      * @throws A syntax error.
      */
-    public throwSyntaxError(index: number): never {
+    public throwSyntaxError(index = this.index): never {
         const padding = 20;
         const before = this.data.slice(0, index);
         const lines = before.split(/\r?\n/);
