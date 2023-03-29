@@ -1,20 +1,20 @@
 import type { TrimmedDataReader } from "../utils/TrimmedDataReader";
+import { AbstractToken } from "./AbstractToken";
 import { TokenType } from "../enums/TokenType";
 import { ValueType } from "../enums/ValueType";
-import { Token } from "../templates/Token";
 import { StringToken } from "./StringToken";
-import { AbstractToken } from "./AbstractToken";
+import { Token } from "../templates/Token";
 
 export class CommandToken extends Token<TokenType.VALUE, ValueType.COMMAND> {
 
     constructor(data: TrimmedDataReader) {
-        super(TokenType.VALUE, ValueType.COMMAND, data);
+        super(data, TokenType.VALUE, ValueType.COMMAND);
     }
 
-    protected parse(data: TrimmedDataReader): [ string, string ] | undefined {
-        const arg0 = new StringToken(data);
-        const connection = new AbstractToken("with", TokenType.CONTEXT, data);
-        const arg1 = new StringToken(data);
+    protected parse(): [ string, string ] | undefined {
+        const arg0 = new StringToken(this.data);
+        const connection = new AbstractToken(this.data, TokenType.CONTEXT, "with");
+        const arg1 = new StringToken(this.data);
 
         if (arg0.test() && connection.test() && arg1.test()) {
             return [ arg0.value, arg1.value ];

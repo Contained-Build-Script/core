@@ -6,11 +6,11 @@ import { Token } from "../templates/Token";
 export class BooleanToken extends Token<TokenType.VALUE, ValueType.BOOLEAN> {
 
     constructor(data: TrimmedDataReader) {
-        super(TokenType.VALUE, ValueType.BOOLEAN, data);
+        super(data, TokenType.VALUE, ValueType.BOOLEAN);
     }
 
-    protected parse(data: TrimmedDataReader): boolean | undefined {
-        const result = data.read(/true|false|TRUE|FALSE/);
+    protected parse(): boolean | undefined {
+        const result = this.data.read(/true|false|TRUE|FALSE/);
 
         if (result) {
             return result[0].toLowerCase() == "true";

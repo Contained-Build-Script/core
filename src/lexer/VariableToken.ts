@@ -5,11 +5,11 @@ import { Token } from "../templates/Token";
 export class VariableToken extends Token<TokenType.VARIABLE> {
 
     constructor(data: TrimmedDataReader) {
-        super(TokenType.VARIABLE, data);
+        super(data, TokenType.VARIABLE);
     }
 
-    protected parse(data: TrimmedDataReader): string | undefined {
-        const result = data.read(/#(?!\d)[^\s[\]{}()\\\/+\-%=!*^&|<>,.`"';:?]+/);
+    protected parse(): string | undefined {
+        const result = this.data.read(/#(?!\d)[^\s[\]{}()\\\/+\-%=!*^&|<>,.`"';:?]+/);
 
         if (result) {
             return result[0];

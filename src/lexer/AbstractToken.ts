@@ -6,14 +6,14 @@ export class AbstractToken<T extends Exclude<TokenType, TokenType.VALUE>> extend
 
     private readonly token: string;
 
-    constructor(token: string, type: T extends TokenType.VALUE ? never : T, data: TrimmedDataReader) {
-        super(type, data);
+    constructor(data: TrimmedDataReader, type: T extends TokenType.VALUE ? never : T, token: string) {
+        super(data, type);
 
         this.token = token;
     }
 
-    protected parse(data: TrimmedDataReader): string | undefined {
-        const result = data.read(this.token);
+    protected parse(): string | undefined {
+        const result = this.data.read(this.token);
 
         if (result) {
             return result;

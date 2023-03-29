@@ -6,11 +6,11 @@ import { Token } from "../templates/Token";
 export class NumberToken extends Token<TokenType.VALUE, ValueType.INT | ValueType.FLOAT> {
 
     constructor(value: ValueType.INT | ValueType.FLOAT, data: TrimmedDataReader) {
-        super(TokenType.VALUE, value, data);
+        super(data, TokenType.VALUE, value);
     }
 
-    protected parse(data: TrimmedDataReader): number | undefined {
-        const result = data.read(/(?:-)?(?:0x[\da-f]+|0b[01]+|(?:(?:\d+)?\.)?\d+(?:e(?:[-+])?\d+)?)/);
+    protected parse(): number | undefined {
+        const result = this.data.read(/(?:-)?(?:0x[\da-f]+|0b[01]+|(?:(?:\d+)?\.)?\d+(?:e(?:[-+])?\d+)?)/);
 
         if (result) {
             const isNegative = +result[0].startsWith("-");

@@ -6,11 +6,11 @@ import { Token } from "../templates/Token";
 export class NullToken extends Token<TokenType.VALUE, ValueType.NULL> {
 
     constructor(data: TrimmedDataReader) {
-        super(TokenType.VALUE, ValueType.NULL, data);
+        super(data, TokenType.VALUE, ValueType.NULL);
     }
 
-    protected parse(data: TrimmedDataReader): null | undefined {
-        const result = data.read(/null|NULL/);
+    protected parse(): null | undefined {
+        const result = this.data.read(/null|NULL/);
 
         if (result) {
             return null;

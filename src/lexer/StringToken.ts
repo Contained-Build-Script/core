@@ -6,11 +6,11 @@ import { Token } from "../templates/Token";
 export class StringToken extends Token<TokenType.VALUE, ValueType.STRING> {
 
     constructor(data: TrimmedDataReader) {
-        super(TokenType.VALUE, ValueType.STRING, data);
+        super(data, TokenType.VALUE, ValueType.STRING);
     }
 
-    protected parse(data: TrimmedDataReader): string | undefined {
-        const result = data.read(/(["'])(.*?(?<!\\)(?:\\\\)*|)\1|`((?:.|\s)*?(?<!\\)(?:\\\\)*|)`/);
+    protected parse(): string | undefined {
+        const result = this.data.read(/(["'])(.*?(?<!\\)(?:\\\\)*|)\1|`((?:.|\s)*?(?<!\\)(?:\\\\)*|)`/);
 
         if (result) {
             return result[2] || result[3];

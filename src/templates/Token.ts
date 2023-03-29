@@ -11,24 +11,32 @@ export abstract class Token<T1 extends TokenType, T2 extends ValueType = T1 exte
 
     public readonly value?: ValueTypeToType<T2>;
 
-    constructor(type: TokenType.VALUE, valueType: T2, data: TrimmedDataReader);
-    constructor(type: T1 extends TokenType.VALUE ? never : T1, data: TrimmedDataReader);
-    constructor(type: T1, arg1: T2 | TrimmedDataReader, arg2?: TrimmedDataReader) {
-        this.type = type;
+    public readonly index: number;
 
-        if (arg2 && typeof arg1 == "number") {
-            this.valueType = arg1;
-            this.value = this.parse(arg2);
-        } else if (arg1 instanceof TrimmedDataReader  && type != TokenType.VALUE) {
-            this.value = this.parse(arg1);
-        } else {
+    protected readonly data: TrimmedDataReader;
+
+    constructor(data: TrimmedDataReader, type: TokenType.VALUE, valueType: T2);
+    constructor(data: TrimmedDataReader, type: T1 extends TokenType.VALUE ? never : T1);
+    constructor(data: TrimmedDataReader, type: T1, valueType?: T2) {
+        this.data = data;
+        this.type = type;
+        this.index = data.index;
+        this.valueType = valueType;
+        
+        if (type == TokenType.VALUE && valueType) {
+            this.value = this.parse();
+        } else if (type != TokenType.VALUE && valueType) {
             throw new Error("Argument mismatch");
         }
     }
 
-    protected abstract parse(data: TrimmedDataReader): ValueTypeToType<T2> | undefined;
+    protected abstract parse(): ValueTypeToType<T2> | undefined;
 
     public test(): this is Token<T1, T2> & { value: ValueTypeToType<T2> } {
         return typeof this.value != "undefined";
+    }
+
+    public throwSyntaxError(): never {
+        this.data.throwSyntaxError(this.index);
     }
 }
