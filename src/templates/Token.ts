@@ -23,9 +23,9 @@ export abstract class Token<T1 extends TokenType, T2 extends ValueType = T1 exte
         this.index = data.index;
         this.valueType = valueType;
         
-        if (type == TokenType.VALUE && valueType) {
+        if (type != TokenType.VALUE || typeof valueType == "number") {
             this.value = this.parse();
-        } else if (type != TokenType.VALUE && valueType) {
+        } else {
             throw new Error("Argument mismatch");
         }
     }
