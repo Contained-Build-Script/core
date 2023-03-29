@@ -17,13 +17,13 @@ Given<TokenWorld>(/^(string|regex) parser tokens with the following info:$/, fun
         return class Test extends Token<any, any> {
 
             constructor(data: TrimmedDataReader) {
-                super(TokenType[type], data);
+                super(data, TokenType[type]);
             }
 
-            protected parse(data: TrimmedDataReader): string | undefined {
-                const result = parserType == "regex" ? data.read(new RegExp(parser)) : data.read(parser);
+            protected parse(): string | undefined {
+                const result = parserType == "regex" ? this.data.read(new RegExp(parser)) : this.data.read(parser);
 
-                if (force_space != "true" || data.followedByWhitespace()) {
+                if (force_space != "true" || this.data.followedByWhitespace()) {
                     return Array.isArray(result) ? result[0] : result;
                 }
             }
@@ -38,13 +38,13 @@ Given<TokenWorld>(/^(string|regex) parser value tokens with the following info:$
         return class Test extends Token<any, any> {
 
             constructor(data: TrimmedDataReader) {
-                super(TokenType.VALUE, ValueType[type], data);
+                super(data, TokenType.VALUE, ValueType[type]);
             }
 
-            protected parse(data: TrimmedDataReader): any {
-                const result = isRegex ? data.read(new RegExp(parser)) : data.read(parser);
+            protected parse(): any {
+                const result = isRegex ? this.data.read(new RegExp(parser)) : this.data.read(parser);
 
-                if (result && (force_space != "true" || data.followedByWhitespace())) {
+                if (result && (force_space != "true" || this.data.followedByWhitespace())) {
                     return JSON.parse(Array.isArray(result) ? result[0] : result);
                 }
             }
