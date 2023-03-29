@@ -6,7 +6,7 @@ import { Repository } from "./Repository";
 
 export abstract class StreamToken {
 
-    protected abstract [Symbol.iterator](): Iterator<Token<TokenType, ValueType> | Repository<TokenType> | StreamToken | undefined>;
+    protected abstract [Symbol.iterator](): Iterator<Token<TokenType, ValueType> | Repository | StreamToken | undefined>;
 
     public readonly tokens: Token<TokenType, ValueType>[];
 

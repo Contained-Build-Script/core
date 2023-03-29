@@ -1,7 +1,6 @@
 import type { TrimmedDataReader } from "../../utils/TrimmedDataReader";
 import { Repository } from "../../templates/Repository";
 import { DifferenceToken } from "../DifferenceToken";
-import { TokenType } from "../../enums/TokenType";
 import { ValueType } from "../../enums/ValueType";
 import { VariableToken } from "../VariableToken";
 import { CommandToken } from "../CommandToken";
@@ -10,7 +9,7 @@ import { StringToken } from "../StringToken";
 import { NumberToken } from "../NumberToken";
 import { NullToken } from "../NullToken";
 
-export class OperatorReadyRepository extends Repository<TokenType.VALUE | TokenType.VARIABLE> {
+export class OperatorReadyRepository extends Repository {
 
     constructor(data: TrimmedDataReader) {
         super(data,
