@@ -1,0 +1,21 @@
+export enum KeywordType {
+    IF,
+    ELSE,
+    FOR,
+    WHILE,
+    FOREACH,
+    IN,
+    OF,
+    SWITCH,
+    CASE,
+    DEFAULT,
+    BREAK,
+    CONTINUE,
+    RETURN,
+    DEFINE,
+    THROW,
+    TRY,
+    CATCH,
+    WITH,
+    TO
+}

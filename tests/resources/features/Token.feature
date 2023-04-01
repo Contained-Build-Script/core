@@ -1,38 +1,49 @@
 Feature: Token test
 
-  Scenario: Create several tokens with a static string parser and parse a piece of text
+  Scenario: Create several tokens with a static string parser and parse a line of code
     Given string parser tokens with the following info:
-      | parser | type     | force_space |
-      | this   | VARIABLE | true        |
-      | is     | VARIABLE | true        |
-      | some   | VARIABLE | true        |
-      | text   | VARIABLE | true        |
-      | to     | VARIABLE | true        |
-      | test   | VARIABLE | false       |
-    And a data parser with "this is some text to test" as data
+      | token   | type          | data_type  |
+      | define  | KEYWORD       | DEFINE     |
+      | string  | VARIABLE_INFO | STRING     |
+      | value   | VARIABLE      | VARIABLE   |
+      | =       | OPERATOR      | ASSIGNMENT |
+      | "value" | VALUE         | STRING     |
+      | ;       | OPERATOR      | LINE_END   |
+    And a data parser with "define string value = \"value\";" as data
     When parsing the data in order
     Then all tokens should be valid
     And the tokens should be:
-      | this  |
-      | is    |
-      | some  |
-      | text  |
-      | to    |
-      | test  |
+      | value   | has_trailing_whitespace | index |
+      | define  | true                    | 0     |
+      | string  | true                    | 7     |
+      | value   | true                    | 14    |
+      | =       | true                    | 20    |
+      | "value" | false                   | 22    |
+      | ;       | false                   | 29    |
 
-  Scenario: Create several value tokens with static parsers to parse different types out of a piece of text
-    Given regex parser value tokens with the following info:
-      | parser      | type    | force_space |
-      | true\|false | BOOLEAN | true        |
-      | \\d+        | INT     | true        |
-      | \\d+\\.\\d+ | FLOAT   | true        |
-      | null        | NULL    | false       |
-    And a data parser with "true 20 20.20 null" as data
+  Scenario: Create several tokens with a regex parser and parse a line of code
+    Given regex parser tokens with the following info:
+      | token       | type          | data_type  |
+      | define      | KEYWORD       | DEFINE     |
+      | const       | VARIABLE_INFO | CONSTANT   |
+      | bool        | VARIABLE_INFO | BOOLEAN    |
+      | value       | VARIABLE      | VARIABLE   |
+      | =           | OPERATOR      | ASSIGNMENT |
+      | (["']).*?\1 | VALUE         | STRING     |
+      | ={2}        | OPERATOR      | EQUAL      |
+      | (["']).*?\1 | VALUE         | STRING     |
+      | ;           | OPERATOR      | LINE_END   |
+    And a data parser with "define const bool value = \"value\" == 'test';" as data
     When parsing the data in order
     Then all tokens should be valid
-    And the tokens and types should be:
-      | value | type    |
-      | true  | boolean |
-      | 20    | number  |
-      | 20.20 | number  |
-      | null  | null    |
+    And the tokens should be:
+      | value   | has_trailing_whitespace | index |
+      | define  | true                    | 0     |
+      | const   | true                    | 7     |
+      | bool    | true                    | 13    |
+      | value   | true                    | 18    |
+      | =       | true                    | 24    |
+      | "value" | true                    | 26    |
+      | ==      | true                    | 34    |
+      | 'test'  | false                   | 37    |
+      | ;       | false                   | 43    |

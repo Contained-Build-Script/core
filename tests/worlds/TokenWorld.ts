@@ -1,10 +1,12 @@
 import type { World } from "@cucumber/cucumber";
+import type { TokenTypeToDataType } from "../../src/types/TokenTypeToDataType";
 import type { TrimmedDataReader } from "../../src/utils/TrimmedDataReader";
-import type { DynamicClass } from "../../src/types/DynamicClass";
-import type { Token } from "../../src/templates/Token";
+import type { AnyTokenClass } from "../../src/types/AnyTokenClass";
+import type { TokenType } from "../../src/enums/TokenType";
+import type { Token } from "../../src/lexer/Token";
 
 export interface TokenWorld extends World {
-    tokens: DynamicClass<Token<any, any>, [TrimmedDataReader]>[];
-    tokenInstances: Token<any, any>[];
+    tokens: AnyTokenClass[];
+    tokenInstances: Token<TokenType, TokenTypeToDataType<TokenType>>[];
     reader?: TrimmedDataReader;
 }

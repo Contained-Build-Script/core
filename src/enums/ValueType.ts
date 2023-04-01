@@ -1,10 +1,6 @@
 export enum ValueType {
-    INT,
+    NUMBER,
     NULL,
-    ARRAY,
-    FLOAT,
     STRING,
-    BOOLEAN,
-    COMMAND,
-    DIFFERENCE
+    BOOLEAN
 }

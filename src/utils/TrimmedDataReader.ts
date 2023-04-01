@@ -2,9 +2,9 @@ export class TrimmedDataReader {
 
     public index: number;
 
-    private readonly checkpoints: number[];
+    public readonly data: string;
     
-    private readonly data: string;
+    private readonly checkpoints: number[];
 
     /**
      * @param data The data to read from.
@@ -13,6 +13,8 @@ export class TrimmedDataReader {
         this.checkpoints = [];
         this.data = data;
         this.index = 0;
+
+        this.skipWhitespace();
     }
 
     /**
@@ -28,8 +30,6 @@ export class TrimmedDataReader {
      */
     public read(regex: RegExp): RegExpExecArray | undefined;
     public read(arg0: RegExp | string): RegExpExecArray | string | undefined {
-        this.index += this.measureUnusedSpace(true);
-
         if (typeof arg0 == "string") {
             if (this.data.startsWith(arg0, this.index)) {
                 this.index += arg0.length;
@@ -77,11 +77,32 @@ export class TrimmedDataReader {
     }
 
     /**
-     * Test if the next token is a whitespace.
+     * Skips all whitespace and returns the amount of skipped characters.
+     * @returns The amount of skipped characters.
+     */
+    public skipWhitespace(): number {
+        const measuredWhitespace = this.measureWhitespace();
+
+        this.index += measuredWhitespace;
+
+        return measuredWhitespace;
+    }
+
+    /**
+     * Test if the following data is whitespace.
+     * **WARNING!** This method will shift the reader's index to the end of the whitespace.
      * @returns The result of the test.
      */
-    public followedByWhitespace(): boolean {
-        return /\s+/y.test(this.data.slice(this.index + this.measureUnusedSpace(false)));
+    public isAtWhitespace(): boolean {
+        return this.skipWhitespace() > 0;
+    }
+
+    /**
+     * Test if the reader is at the end of the data string.
+     * @returns The result of the test.
+     */
+    public isAtEnd(): boolean {
+        return this.index >= this.data.length;
     }
 
     /**
@@ -101,9 +122,7 @@ export class TrimmedDataReader {
         ].join("\n");
     }
 
-    private measureUnusedSpace(withWhitespace: boolean): number {
-        return [
-            ...this.data.slice(this.index).matchAll(new RegExp("\\/\\/.*$|\\/\\*(\\s|.)*?\\*\\/" + (withWhitespace ? "|\\s+" : ""), "gym"))
-        ].reduce((sum, current) => current[0].length + sum, 0);
+    private measureWhitespace(): number {
+        return /(?:\/\/.*$|\/\*(?:\s|.)*?\*\/|\s+)+/my.exec(this.data.slice(this.index))?.[0].length ?? 0;
     }
 }

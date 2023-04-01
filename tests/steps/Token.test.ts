@@ -2,9 +2,14 @@ import type { TokenWorld } from "../worlds/TokenWorld";
 import { Before, DataTable, Then, When, Given } from "@cucumber/cucumber";
 import { expect } from "chai";
 import { TrimmedDataReader } from "../../src/utils/TrimmedDataReader";
+import { VariableInfoType } from "../../src/enums/VariableInfoType";
+import { VariableType } from "../../src/enums/VariableType";
+import { OperatorType } from "../../src/enums/OperatorType";
+import { KeywordType } from "../../src/enums/KeywordType";
+import { ContextType } from "../../src/enums/ContextType";
 import { ValueType } from "../../src/enums/ValueType";
 import { TokenType } from "../../src/enums/TokenType";
-import { Token } from "../../src/templates/Token";
+import { Token } from "../../src/lexer/Token";
 
 Before<TokenWorld>(function() {
     this.tokens = [];
@@ -12,43 +17,19 @@ Before<TokenWorld>(function() {
     this.reader = undefined;
 });
 
-Given<TokenWorld>(/^(string|regex) parser tokens with the following info:$/, function(parserType: string, table: DataTable) {
-    this.tokens.push(...table.hashes().map(({ parser, type, force_space }) => {
-        return class Test extends Token<any, any> {
+Given<TokenWorld>(/^(string|regex) parser tokens with the following info:$/, function(parserType: "string" | "regex", table: DataTable) {
+    const enumForType = {
+        VALUE: ValueType,
+        CONTEXT: ContextType,
+        KEYWORD: KeywordType,
+        OPERATOR: OperatorType,
+        VARIABLE: VariableType,
+        VARIABLE_INFO: VariableInfoType
+    };
 
-            constructor(data: TrimmedDataReader) {
-                super(data, TokenType[type]);
-            }
-
-            protected parse(): string | undefined {
-                const result = parserType == "regex" ? this.data.read(new RegExp(parser)) : this.data.read(parser);
-
-                if (force_space != "true" || this.data.followedByWhitespace()) {
-                    return Array.isArray(result) ? result[0] : result;
-                }
-            }
-        }
-    }));
-});
-
-Given<TokenWorld>(/^(string|regex) parser value tokens with the following info:$/, function(parserType: string, table: DataTable) {
-    const isRegex = parserType == "regex";
-
-    this.tokens.push(...table.hashes().map(({ parser, type, force_space }) => {
-        return class Test extends Token<any, any> {
-
-            constructor(data: TrimmedDataReader) {
-                super(data, TokenType.VALUE, ValueType[type]);
-            }
-
-            protected parse(): any {
-                const result = isRegex ? this.data.read(new RegExp(parser)) : this.data.read(parser);
-
-                if (result && (force_space != "true" || this.data.followedByWhitespace())) {
-                    return JSON.parse(Array.isArray(result) ? result[0] : result);
-                }
-            }
-        }
+    this.tokens.push(...table.hashes().map(({ token, type, data_type }) => {
+        // @ts-ignore TS refuses to show type errors here and I can't be bothered to fix type errors in a unit test
+        return Token.bind(null, parserType == "string" ? token : new RegExp(token), TokenType[type], enumForType[type][data_type]);
     }));
 });
 
@@ -62,20 +43,16 @@ When<TokenWorld>("parsing the data in order", function() {
     }));
 });
 
-Then<TokenWorld>("the tokens should be:", function(table: DataTable) {
-    table.raw().map(([ value ], i) => {
-        expect(this.tokenInstances[i].value).to.be.a("string").which.equals(value);
-    });
-});
-
-Then<TokenWorld>("the tokens and types should be:", function(table: DataTable) {
-    table.hashes().map(({ value, type }, i) => {
-        expect(this.tokenInstances[i].value).to.be.a(type).which.equals(JSON.parse(value));
-    });
-});
-
 Then<TokenWorld>("all tokens should be valid", function() {
     this.tokenInstances.forEach((token) => {
-        expect(token.test()).to.be.true;
+        expect(token.test()).to.be.a("boolean").which.true;
+    });
+});
+
+Then<TokenWorld>("the tokens should be:", function(table: DataTable) {
+    table.hashes().map(({ value, has_trailing_whitespace, index }, i) => {
+        expect(this.tokenInstances[i].value).to.be.a("string").which.equals(value);
+        expect(this.tokenInstances[i].hasTrailingWhitespace).to.be.a("boolean").which.equals(has_trailing_whitespace == "true");
+        expect(this.tokenInstances[i].index).to.be.a("number").which.equals(Number(index));
     });
 });
