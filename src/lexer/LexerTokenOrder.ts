@@ -11,6 +11,7 @@ export const LEXER_TOKEN_ORDER: Array<SimpleTokenCollection<TokenType>> = [
     {
         tokenType: TokenType.OPERATOR,
         tokens: [
+            [OperatorType.ARROW, "=>"],
             [OperatorType.LEFT_SHIFT, "<<"],
             [OperatorType.LESS_THAN_OR_EQUAL, "<="],
             [OperatorType.LESS_THAN, "<"],
@@ -44,12 +45,6 @@ export const LEXER_TOKEN_ORDER: Array<SimpleTokenCollection<TokenType>> = [
             [OperatorType.COMMA, ","],
             [OperatorType.LINE_END, ";"]
         ]
-    },
-    {
-        // NOTE: To optimize the lexer, this should be placed after all symbol tokens as it has no overlap
-        tokenType: TokenType.VARIABLE,
-        // To be populated later to make sure that all tokens are dynamically blacklisted from being used as a variable name
-        tokens: []
     },
     {
         tokenType: TokenType.CONTEXT,
@@ -117,7 +112,7 @@ export const LEXER_TOKEN_ORDER: Array<SimpleTokenCollection<TokenType>> = [
     },
 ];
 
-LEXER_TOKEN_ORDER[0].tokens.push([
+LEXER_TOKEN_ORDER[2].tokens.push([
     VariableType.VARIABLE,
     new RegExp(`(?!\\d|^(${LEXER_TOKEN_ORDER.reduce((words, { tokens }) => {
         tokens.forEach(([_, token]) => {

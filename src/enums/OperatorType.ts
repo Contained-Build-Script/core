@@ -30,5 +30,6 @@ export enum OperatorType {
     RIGHT_SHIFT,
     COMMA,
     CASE_OPEN,
-    LINE_END
+    LINE_END,
+    ARROW
 }
