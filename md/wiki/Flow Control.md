@@ -17,7 +17,7 @@ If you want to chain multiple `if` statements together, you can use the `else if
 ### If example
 
 ```ts
-define const boolean #test = true;
+define const bool #test = true;
 
 if (#test) {
     execute("echo" with "test is true");

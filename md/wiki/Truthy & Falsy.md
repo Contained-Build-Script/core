@@ -8,7 +8,7 @@ The following values are considered falsy:
 
 | Value                                                      | Type                          |
 |------------------------------------------------------------|-------------------------------|
-| `false`                                                    | `boolean`                     |
+| `false`                                                    | `bool`                        |
 | Any number equal to `0`                                    | `int` or `float`              |
 | `""`                                                       | `string`                      |
 | `[]`                                                       | `array`                       |

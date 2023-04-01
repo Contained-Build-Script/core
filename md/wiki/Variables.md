@@ -74,7 +74,7 @@ define const string #a_string = "Hello World!";
 
 // For now this will be null until a value is assigned to it
 define const string #hello_message;
-define const boolean #is_universal = true;
+define const bool #is_universal = true;
 
 if (#is_universal) {
     // Now the variable will permanently be "Hello Universe!"

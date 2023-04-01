@@ -11,17 +11,18 @@ These operators are used to evaluate a numeric value based on the 2 inputs. All 
 | `+`      | Addition       | Adds to 2 values together. If the value is a string or array, it will concatenate the 2 values. |
 | `-`      | Subtraction    | Subtracts the 2nd value from the 1st value.                                                     |
 | `*`      | Multiplication | Multiplies the 2 values together.                                                               |
+| `**`     | Exponentiation | Applies the power of the 2nd value to the 1st value.                                            |
 | `/`      | Division       | Divides the 1st value by the 2nd value.                                                         |
 | `%`      | Modulo         | Returns the remainder of the 1st value divided by the 2nd value.                                |
 
 ### Increment and decrement
 
-These operators can't be used in compound assignment operators.
+These operators can't be used in compound assignment operators and can only be applied to numeric variables.
 
-| Operator | Action    | Description                 |
-|----------|-----------|-----------------------------|
-| `++`     | Increment | Adds 1 to the value.        |
-| `--`     | Decrement | Subtracts 1 from the value. |
+| Operator | Action    | Description                    |
+|----------|-----------|--------------------------------|
+| `++`     | Increment | Adds 1 to the variable.        |
+| `--`     | Decrement | Subtracts 1 from the variable. |
 
 ## Comparison
 

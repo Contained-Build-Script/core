@@ -4,6 +4,7 @@
 class CBSHighlighter {
 
     /**
+     * TODO: fix the variable regex
      * @private
      * @readonly
      */
@@ -14,7 +15,7 @@ class CBSHighlighter {
         },
         {
             type: "text",
-            matcher: /[*+-/%!=]=?|\+\+|--|[\^&|]{1,2}|![&|]{2}?|~[&|]?|[<>]{1,2}|[;,:]|=>/
+            matcher: /=>|![&|]{2}|[+\-*]{2}|[*+\-/%!=]=?|[\^&|]{1,2}|~[&|]?|([<>])(?:\1|=)?|[;,:]/
         },
         {
             type: "variable",
@@ -26,25 +27,28 @@ class CBSHighlighter {
         },
         {
             type: "number",
-            matcher: /(?:-)?(?:0x[\da-f]+|0b[01]+|(?:(?:\d+)?\.)?\d+(?:e(?:[-+])?\d+)?)/
+            matcher: /(?:-)?(?:0x[\da-f]+|0b[01]+|(?:(?:\d+)?\.)?\d+(?:e[-+]?\d+)?)/
         },
         {
             type: "constant",
             matcher: [
-                "const",
-                "function",
                 "true",
+                "TRUE",
                 "false",
-                "null"
+                "FALSE",
+                "null",
+                "NULL",
+                "const",
+                "function"
             ]
         },
         {
             type: "type",
             matcher: [
                 "int",
+                "bool",
                 "float",
                 "string",
-                "boolean",
                 "command",
                 "difference"
             ]
@@ -55,9 +59,9 @@ class CBSHighlighter {
                 "if",
                 "define",
                 "else",
+                "foreach",
                 "for",
                 "while",
-                "foreach",
                 "in",
                 "of",
                 "switch",
@@ -68,22 +72,14 @@ class CBSHighlighter {
                 "return",
                 "with",
                 "to",
-                "throw"
+                "throw",
+                "try",
+                "catch"
             ]
         },
         {
             type: "keyword",
             matcher: /[(){}\[\]]/
-        },
-        {
-            type: "constant",
-            matcher: [
-                "true",
-                "false",
-                "null",
-                "const",
-                "function"
-            ]
         },
         {
             type: "function",
