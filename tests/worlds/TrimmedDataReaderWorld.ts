@@ -1,5 +1,5 @@
 import type { World } from "@cucumber/cucumber";
-import type { TrimmedDataReader } from "../../src/utils/TrimmedDataReader";
+import type { TrimmedDataReader } from "../../src/lexer/utils/TrimmedDataReader";
 
 export interface TrimmedDataReaderWorld extends World {
     matches: Array<RegExpExecArray | string | void>[];

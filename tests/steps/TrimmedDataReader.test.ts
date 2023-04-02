@@ -1,7 +1,7 @@
 import type { TrimmedDataReaderWorld } from "../worlds/TrimmedDataReaderWorld";
 import { Before, DataTable, Given, Then, When } from "@cucumber/cucumber";
 import { expect } from "chai";
-import { TrimmedDataReader } from "../../src/utils/TrimmedDataReader";
+import { TrimmedDataReader } from "../../src/lexer/utils/TrimmedDataReader";
 
 Before<TrimmedDataReaderWorld>(function() {
     this.matches = [];

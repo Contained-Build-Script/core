@@ -1,14 +1,14 @@
 import type { TokenWorld } from "../worlds/TokenWorld";
 import { Before, DataTable, Then, When, Given } from "@cucumber/cucumber";
 import { expect } from "chai";
-import { TrimmedDataReader } from "../../src/utils/TrimmedDataReader";
-import { VariableInfoType } from "../../src/enums/VariableInfoType";
-import { VariableType } from "../../src/enums/VariableType";
-import { OperatorType } from "../../src/enums/OperatorType";
-import { KeywordType } from "../../src/enums/KeywordType";
-import { ContextType } from "../../src/enums/ContextType";
-import { ValueType } from "../../src/enums/ValueType";
-import { TokenType } from "../../src/enums/TokenType";
+import { TrimmedDataReader } from "../../src/lexer/utils/TrimmedDataReader";
+import { VariableInfoType } from "../../src/lexer/enums/VariableInfoType";
+import { VariableType } from "../../src/lexer/enums/VariableType";
+import { OperatorType } from "../../src/lexer/enums/OperatorType";
+import { KeywordType } from "../../src/lexer/enums/KeywordType";
+import { ContextType } from "../../src/lexer/enums/ContextType";
+import { ValueType } from "../../src/lexer/enums/ValueType";
+import { TokenType } from "../../src/lexer/enums/TokenType";
 import { Token } from "../../src/lexer/Token";
 
 Before<TokenWorld>(function() {

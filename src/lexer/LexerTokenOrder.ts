@@ -1,11 +1,11 @@
-import type { SimpleTokenCollection } from "../types/SimpleTokenCollection";
-import { VariableInfoType } from "../enums/VariableInfoType";
-import { OperatorType } from "../enums/OperatorType";
-import { ContextType } from "../enums/ContextType";
-import { KeywordType } from "../enums/KeywordType";
-import { TokenType } from "../enums/TokenType";
-import { ValueType } from "../enums/ValueType";
-import { VariableType } from "../enums/VariableType";
+import type { SimpleTokenCollection } from "./types/SimpleTokenCollection";
+import { VariableInfoType } from "./enums/VariableInfoType";
+import { OperatorType } from "./enums/OperatorType";
+import { ContextType } from "./enums/ContextType";
+import { KeywordType } from "./enums/KeywordType";
+import { TokenType } from "./enums/TokenType";
+import { ValueType } from "./enums/ValueType";
+import { VariableType } from "./enums/VariableType";
 
 export const LEXER_TOKEN_ORDER: Array<SimpleTokenCollection<TokenType>> = [
     {

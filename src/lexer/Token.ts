@@ -1,6 +1,6 @@
-import type { TokenTypeToDataType } from "../types/TokenTypeToDataType";
-import type { TrimmedDataReader } from "../utils/TrimmedDataReader";
-import type { TokenType } from "../enums/TokenType";
+import type { TokenTypeToDataType } from "./types/TokenTypeToDataType";
+import type { TrimmedDataReader } from "./utils/TrimmedDataReader";
+import type { TokenType } from "./enums/TokenType";
 
 export class Token<T1 extends TokenType, T2 extends TokenTypeToDataType<T1>> {
 
