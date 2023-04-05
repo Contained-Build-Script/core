@@ -2,7 +2,7 @@ import type { TokenTypeToDataType } from "./types/TokenTypeToDataType";
 import type { TrimmedDataReader } from "./utils/TrimmedDataReader";
 import type { TokenType } from "./enums/TokenType";
 
-export class Token<T1 extends TokenType, T2 extends TokenTypeToDataType<T1>> {
+export class Token<T1 extends TokenType = TokenType> {
 
     public readonly type: T1;
 
@@ -16,7 +16,7 @@ export class Token<T1 extends TokenType, T2 extends TokenTypeToDataType<T1>> {
 
     private readonly data: TrimmedDataReader;
 
-    constructor(token: string | RegExp | string[], type: T1, dataType: T2, data: TrimmedDataReader) {
+    constructor(token: string | RegExp | string[], type: T1, dataType: TokenTypeToDataType<T1>, data: TrimmedDataReader) {
         const checkpoint = data.addCheckpoint();
 
         this.type = type;

@@ -1,6 +1,4 @@
-import type { TokenTypeToDataType } from "./types/TokenTypeToDataType";
 import type { AnyTokenClass } from "./types/AnyTokenClass";
-import type { TokenType } from "./enums/TokenType";
 import { TrimmedDataReader } from "./utils/TrimmedDataReader";
 import { LEXER_TOKEN_ORDER } from "./LexerTokenOrder";
 import { Token } from "./Token";
@@ -17,7 +15,7 @@ export class Lexer {
         return tokens;
     }, <AnyTokenClass[]>[]);
 
-    public readonly tokens: Token<TokenType, TokenTypeToDataType<TokenType>>[];
+    public readonly tokens: Token[];
 
     constructor(data: string) {
         const reader = new TrimmedDataReader(data);
