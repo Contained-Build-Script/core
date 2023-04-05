@@ -16,7 +16,7 @@ export class Token<T1 extends TokenType = TokenType> {
 
     private readonly data: TrimmedDataReader;
 
-    constructor(token: string | RegExp | string[], type: T1, dataType: TokenTypeToDataType<T1>, data: TrimmedDataReader) {
+    constructor(token: string | RegExp, type: T1, dataType: TokenTypeToDataType<T1>, data: TrimmedDataReader) {
         const checkpoint = data.addCheckpoint();
 
         this.type = type;
@@ -25,10 +25,8 @@ export class Token<T1 extends TokenType = TokenType> {
 
         if (typeof token == "string") {
             this.value = data.read(token) ?? "";
-        } else if (token instanceof RegExp) {
-            this.value = data.read(token)?.[0] ?? "";
         } else {
-            this.value = data.read(new RegExp(token.join("|")))?.[0] ?? "";
+            this.value = data.read(token)?.[0] ?? "";
         }
 
         this.hasTrailingWhitespace = data.isAtWhitespace();

@@ -111,9 +111,9 @@ export const LEXER_TOKEN_ORDER: Array<SimpleTokenCollection<TokenType>> = [
         tokenType: TokenType.VALUE,
         tokens: [
             [ValueType.NUMBER, /(?:-)?(?:0x[\da-f]+|0b[01]+|(?:(?:\d+)?\.)?\d+(?:e[-+]?\d+)?)/],
-            [ValueType.NULL, ["null", "NULL"]],
+            [ValueType.NULL, /null|NULL/],
             [ValueType.STRING, /(["'])(.*?(?<!\\)(?:\\\\)*|)\1|`((?:.|\s)*?(?<!\\)(?:\\\\)*|)`/],
-            [ValueType.BOOLEAN, ["true", "false", "TRUE", "FALSE"]]
+            [ValueType.BOOLEAN, /true|TRUE|false|FALSE/]
         ]
     },
 ];
