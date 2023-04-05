@@ -25,7 +25,7 @@ Feature: Token test
     Given regex parser tokens with the following info:
       | token       | type          | data_type  |
       | define      | KEYWORD       | DEFINE     |
-      | const       | VARIABLE_INFO | CONSTANT   |
+      | const       | KEYWORD       | CONSTANT   |
       | bool        | VARIABLE_INFO | BOOLEAN    |
       | value       | VARIABLE      | VARIABLE   |
       | =           | OPERATOR      | ASSIGNMENT |

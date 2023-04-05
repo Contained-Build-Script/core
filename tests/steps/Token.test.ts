@@ -54,5 +54,7 @@ Then<TokenWorld>("the tokens should be:", function(table: DataTable) {
         expect(this.tokenInstances[i].value).to.be.a("string").which.equals(value);
         expect(this.tokenInstances[i].hasTrailingWhitespace).to.be.a("boolean").which.equals(has_trailing_whitespace == "true");
         expect(this.tokenInstances[i].index).to.be.a("number").which.equals(Number(index));
+        expect(this.tokenInstances[i].type).to.be.a("number");
+        expect(this.tokenInstances[i].dataType).to.be.a("number");
     });
 });
