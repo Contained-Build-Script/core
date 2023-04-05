@@ -1,4 +1,5 @@
 import type { SimpleTokenCollection } from "./types/SimpleTokenCollection";
+import { UpdateOperatorType } from "./enums/UpdateOperatorType";
 import { VariableInfoType } from "./enums/VariableInfoType";
 import { OperatorType } from "./enums/OperatorType";
 import { ContextType } from "./enums/ContextType";
@@ -9,6 +10,13 @@ import { VariableType } from "./enums/VariableType";
 
 export const LEXER_TOKEN_ORDER: Array<SimpleTokenCollection<TokenType>> = [
     {
+        tokenType: TokenType.UPDATE_OPERATOR,
+        tokens: [
+            [UpdateOperatorType.INCREMENT, "++"],
+            [UpdateOperatorType.DECREMENT, "--"]
+        ]
+    },
+    {
         tokenType: TokenType.OPERATOR,
         tokens: [
             [OperatorType.ARROW, "=>"],
@@ -18,9 +26,7 @@ export const LEXER_TOKEN_ORDER: Array<SimpleTokenCollection<TokenType>> = [
             [OperatorType.RIGHT_SHIFT, ">>"],
             [OperatorType.GREATER_THAN_OR_EQUAL, ">="],
             [OperatorType.GREATER_THAN, ">"],
-            [OperatorType.INCREMENT, "++"],
             [OperatorType.ADDITION, "+"],
-            [OperatorType.DECREMENT, "--"],
             [OperatorType.SUBTRACTION, "-"],
             [OperatorType.EXPONENTIATION, "**"],
             [OperatorType.MULTIPLICATION, "*"],

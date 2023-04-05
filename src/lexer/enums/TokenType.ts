@@ -10,5 +10,7 @@ export enum TokenType {
     // A variable like #var, #var1, #var2, etc.
     VARIABLE,
     // A variable definition keyword like string, number, const, etc.
-    VARIABLE_INFO
+    VARIABLE_INFO,
+    // An update operator like ++ and --
+    UPDATE_OPERATOR
 }

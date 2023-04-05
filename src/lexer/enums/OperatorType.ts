@@ -6,8 +6,6 @@ export enum OperatorType {
     EXPONENTIATION,
     DIVISION,
     MODULO,
-    INCREMENT,
-    DECREMENT,
     EQUAL,
     NOT_EQUAL,
     LESS_THAN,
