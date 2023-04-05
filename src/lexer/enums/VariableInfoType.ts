@@ -1,5 +1,4 @@
 export enum VariableInfoType {
-    CONSTANT,
     INT,
     NULL,
     FLOAT,

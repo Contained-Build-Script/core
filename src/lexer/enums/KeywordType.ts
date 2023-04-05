@@ -17,5 +17,6 @@ export enum KeywordType {
     TRY,
     CATCH,
     WITH,
-    TO
+    TO,
+    CONSTANT
 }

@@ -89,13 +89,13 @@ export const LEXER_TOKEN_ORDER: Array<SimpleTokenCollection<TokenType>> = [
             [KeywordType.TRY, "try"],
             [KeywordType.CATCH, "catch"],
             [KeywordType.WITH, "with"],
-            [KeywordType.TO, "to"]
+            [KeywordType.TO, "to"],
+            [KeywordType.CONSTANT, "const"]
         ]
     },
     {
         tokenType: TokenType.VARIABLE_INFO,
         tokens: [
-            [VariableInfoType.CONSTANT, "const"],
             [VariableInfoType.INT, "int"],
             [VariableInfoType.NULL, "null"],
             [VariableInfoType.FLOAT, "float"],
