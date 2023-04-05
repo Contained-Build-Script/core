@@ -6,11 +6,7 @@ import { Token } from "./Token";
 export class Lexer {
 
     private static readonly tokenClasses: AnyTokenClass[] = LEXER_TOKEN_ORDER.reduce((tokens, tokenObject) => {
-        if ("tokenType" in tokenObject) {
-            tokens.push(...tokenObject.tokens.map(([ dataType, token ]) => Token.bind(null, token, tokenObject.tokenType, dataType)));
-        } else {
-            tokens.push(tokenObject);
-        }
+        tokens.push(...tokenObject.tokens.map(([ dataType, token ]) => Token.bind(null, token, tokenObject.tokenType, dataType)));
 
         return tokens;
     }, <AnyTokenClass[]>[]);
