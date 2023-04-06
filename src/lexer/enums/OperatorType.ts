@@ -1,5 +1,4 @@
 export enum OperatorType {
-    ASSIGNMENT,
     ADDITION,
     SUBTRACTION,
     MULTIPLICATION,
@@ -14,20 +13,14 @@ export enum OperatorType {
     GREATER_THAN_OR_EQUAL,
     AND,
     OR,
-    NOT,
     XOR,
     NAND,
     NOR,
     AND_BITWISE,
     OR_BITWISE,
-    NOT_BITWISE,
     XOR_BITWISE,
     NAND_BITWISE,
     NOR_BITWISE,
     LEFT_SHIFT,
-    RIGHT_SHIFT,
-    COMMA,
-    CASE_OPEN,
-    LINE_END,
-    ARROW
+    RIGHT_SHIFT
 }

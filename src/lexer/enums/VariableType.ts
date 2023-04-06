@@ -1,3 +1,3 @@
 export enum VariableType {
-    VARIABLE
+    IDENTIFIER
 }

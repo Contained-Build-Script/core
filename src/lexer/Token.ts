@@ -32,10 +32,10 @@ export class Token<T1 extends TokenType = TokenType> {
         this.hasTrailingWhitespace = data.isAtWhitespace();
         this.data = data;
 
-        if (!this.test()) {
-            data.revertToCheckpoint(checkpoint);
-        } else {
+        if (this.test()) {
             data.cleanCheckpoint(checkpoint);
+        } else {
+            data.revertToCheckpoint(checkpoint);
         }
     }
 

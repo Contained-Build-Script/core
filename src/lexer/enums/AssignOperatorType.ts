@@ -1,0 +1,16 @@
+export enum AssignOperatorType {
+    ASSIGNMENT,
+    ADDITION,
+    SUBTRACTION,
+    MULTIPLICATION,
+    DIVISION,
+    MODULO,
+    EXPONENTIATION,
+    AND_BITWISE,
+    OR_BITWISE,
+    XOR_BITWISE,
+    NAND_BITWISE,
+    NOR_BITWISE,
+    LEFT_SHIFT,
+    RIGHT_SHIFT
+}

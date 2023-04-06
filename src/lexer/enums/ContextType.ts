@@ -4,5 +4,9 @@ export enum ContextType {
     ARRAY_START,
     ARRAY_END,
     SCOPE_START,
-    SCOPE_END
+    SCOPE_END,
+    LINE_END,
+    ARROW,
+    COMMA,
+    CASE_OPEN
 }

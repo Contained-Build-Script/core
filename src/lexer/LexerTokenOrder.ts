@@ -1,14 +1,17 @@
-import type { SimpleTokenCollection } from "./types/SimpleTokenCollection";
+import type { SimpleTokenCollections } from "./types/SimpleTokenCollections";
+import { MutationOperatorType } from "./enums/MutationOperatorType";
+import { AssignOperatorType } from "./enums/AssignOperatorType";
 import { UpdateOperatorType } from "./enums/UpdateOperatorType";
 import { VariableInfoType } from "./enums/VariableInfoType";
+import { VariableType } from "./enums/VariableType";
 import { OperatorType } from "./enums/OperatorType";
 import { ContextType } from "./enums/ContextType";
 import { KeywordType } from "./enums/KeywordType";
 import { TokenType } from "./enums/TokenType";
 import { ValueType } from "./enums/ValueType";
-import { VariableType } from "./enums/VariableType";
+import { SimpleTokenCollection } from "./types/SimpleTokenCollection";
 
-export const LEXER_TOKEN_ORDER: Array<SimpleTokenCollection<TokenType>> = [
+export const LEXER_TOKEN_ORDER: SimpleTokenCollections = [
     {
         tokenType: TokenType.UPDATE_OPERATOR,
         tokens: [
@@ -17,9 +20,41 @@ export const LEXER_TOKEN_ORDER: Array<SimpleTokenCollection<TokenType>> = [
         ]
     },
     {
+        tokenType: TokenType.ASSIGN_OPERATOR,
+        tokens: [
+            [AssignOperatorType.ADDITION, "+="],
+            [AssignOperatorType.SUBTRACTION, "-="],
+            [AssignOperatorType.MULTIPLICATION, "*="],
+            [AssignOperatorType.DIVISION, "/="],
+            [AssignOperatorType.MODULO, "%="],
+            [AssignOperatorType.EXPONENTIATION, "**="],
+            [AssignOperatorType.AND_BITWISE, "&="],
+            [AssignOperatorType.OR_BITWISE, "|="],
+            [AssignOperatorType.XOR_BITWISE, "^="],
+            [AssignOperatorType.NAND_BITWISE, "~&="],
+            [AssignOperatorType.NOR_BITWISE, "~|="],
+            [AssignOperatorType.LEFT_SHIFT, "<<="],
+            [AssignOperatorType.RIGHT_SHIFT, ">>="]
+        ]
+    },
+    {
+        tokenType: TokenType.CONTEXT,
+        tokens: [
+            [ContextType.ENCAPSULATION_START, "("],
+            [ContextType.ENCAPSULATION_END, ")"],
+            [ContextType.ARRAY_START, "["],
+            [ContextType.ARRAY_END, "]"],
+            [ContextType.SCOPE_START, "{"],
+            [ContextType.SCOPE_END, "}"],
+            [ContextType.ARROW, "=>"],
+            [ContextType.CASE_OPEN, ":"],
+            [ContextType.COMMA, ","],
+            [ContextType.LINE_END, ";"]
+        ]
+    },
+    {
         tokenType: TokenType.OPERATOR,
         tokens: [
-            [OperatorType.ARROW, "=>"],
             [OperatorType.LEFT_SHIFT, "<<"],
             [OperatorType.LESS_THAN_OR_EQUAL, "<="],
             [OperatorType.LESS_THAN, "<"],
@@ -33,11 +68,9 @@ export const LEXER_TOKEN_ORDER: Array<SimpleTokenCollection<TokenType>> = [
             [OperatorType.DIVISION, "/"],
             [OperatorType.MODULO, "%"],
             [OperatorType.EQUAL, "=="],
-            [OperatorType.ASSIGNMENT, "="],
             [OperatorType.NOT_EQUAL, "!="],
             [OperatorType.NAND, "!&&"],
             [OperatorType.NOR, "!||"],
-            [OperatorType.NOT, "!"],
             [OperatorType.AND, "&&"],
             [OperatorType.AND_BITWISE, "&"],
             [OperatorType.OR, "||"],
@@ -45,28 +78,39 @@ export const LEXER_TOKEN_ORDER: Array<SimpleTokenCollection<TokenType>> = [
             [OperatorType.XOR, "^^"],
             [OperatorType.XOR_BITWISE, "^"],
             [OperatorType.NAND_BITWISE, "~&"],
-            [OperatorType.NOR_BITWISE, "~|"],
-            [OperatorType.NOT_BITWISE, "~"],
-            [OperatorType.CASE_OPEN, ":"],
-            [OperatorType.COMMA, ","],
-            [OperatorType.LINE_END, ";"]
+            [OperatorType.NOR_BITWISE, "~|"]
         ]
     },
     {
-        tokenType: TokenType.CONTEXT,
+        tokenType: TokenType.ASSIGN_OPERATOR,
         tokens: [
-            [ContextType.ENCAPSULATION_START, "("],
-            [ContextType.ENCAPSULATION_END, ")"],
-            [ContextType.ARRAY_START, "["],
-            [ContextType.ARRAY_END, "]"],
-            [ContextType.SCOPE_START, "{"],
-            [ContextType.SCOPE_END, "}"]
+            [AssignOperatorType.ASSIGNMENT, "="]
+        ]
+    },
+    {
+        tokenType: TokenType.MUTATION_OPERATOR,
+        tokens: [
+            [MutationOperatorType.NOT, "!"],
+            [MutationOperatorType.NOT_BITWISE, "~"]
         ]
     },
     {
         tokenType: TokenType.VARIABLE,
         // To be populated later to make sure that all tokens are dynamically blacklisted from being used as a variable name
         tokens: []
+    },
+    {
+        tokenType: TokenType.VARIABLE_INFO,
+        tokens: [
+            [VariableInfoType.INT, "int"],
+            [VariableInfoType.NULL, "null"],
+            [VariableInfoType.FLOAT, "float"],
+            [VariableInfoType.STRING, "string"],
+            [VariableInfoType.BOOLEAN, "bool"],
+            [VariableInfoType.COMMAND, "command"],
+            [VariableInfoType.FUNCTION, "function"],
+            [VariableInfoType.DIFFERENCE, "difference"]
+        ]
     },
     {
         tokenType: TokenType.KEYWORD,
@@ -94,19 +138,6 @@ export const LEXER_TOKEN_ORDER: Array<SimpleTokenCollection<TokenType>> = [
         ]
     },
     {
-        tokenType: TokenType.VARIABLE_INFO,
-        tokens: [
-            [VariableInfoType.INT, "int"],
-            [VariableInfoType.NULL, "null"],
-            [VariableInfoType.FLOAT, "float"],
-            [VariableInfoType.STRING, "string"],
-            [VariableInfoType.BOOLEAN, "bool"],
-            [VariableInfoType.COMMAND, "command"],
-            [VariableInfoType.FUNCTION, "function"],
-            [VariableInfoType.DIFFERENCE, "difference"]
-        ]
-    },
-    {
         // NOTE: Always put this last, no other tokens have any overlap with this and you want to make sure that it uses regexes as little as possible
         tokenType: TokenType.VALUE,
         tokens: [
@@ -118,8 +149,8 @@ export const LEXER_TOKEN_ORDER: Array<SimpleTokenCollection<TokenType>> = [
     },
 ];
 
-LEXER_TOKEN_ORDER[2].tokens.push([
-    VariableType.VARIABLE,
+(<SimpleTokenCollection<TokenType.VARIABLE>>LEXER_TOKEN_ORDER.find((collection) => collection.tokenType == TokenType.VARIABLE)).tokens.push([
+    VariableType.IDENTIFIER,
     new RegExp(`(?!\\d|^(${LEXER_TOKEN_ORDER.reduce((words, { tokens }) => {
         tokens.forEach(([_, token]) => {
             const regex = /^\w+$/m;

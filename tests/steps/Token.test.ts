@@ -1,6 +1,9 @@
 import type { TokenWorld } from "../worlds/TokenWorld";
 import { Before, DataTable, Then, When, Given } from "@cucumber/cucumber";
 import { expect } from "chai";
+import { MutationOperatorType } from "../../src/lexer/enums/MutationOperatorType";
+import { UpdateOperatorType } from "../../src/lexer/enums/UpdateOperatorType";
+import { AssignOperatorType } from "../../src/lexer/enums/AssignOperatorType";
 import { TrimmedDataReader } from "../../src/lexer/utils/TrimmedDataReader";
 import { VariableInfoType } from "../../src/lexer/enums/VariableInfoType";
 import { VariableType } from "../../src/lexer/enums/VariableType";
@@ -24,7 +27,10 @@ Given<TokenWorld>(/^(string|regex) parser tokens with the following info:$/, fun
         KEYWORD: KeywordType,
         OPERATOR: OperatorType,
         VARIABLE: VariableType,
-        VARIABLE_INFO: VariableInfoType
+        VARIABLE_INFO: VariableInfoType,
+        UPDATE_OPERATOR: UpdateOperatorType,
+        ASSIGN_OPERATOR: AssignOperatorType,
+        MUTATION_OPERATOR: MutationOperatorType
     };
 
     this.tokens.push(...table.hashes().map(({ token, type, data_type }) => {
