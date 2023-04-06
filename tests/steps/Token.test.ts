@@ -50,17 +50,17 @@ When<TokenWorld>("parsing the data in order", function() {
 });
 
 Then<TokenWorld>("all tokens should be valid", function() {
-    this.tokenInstances.forEach((token) => {
-        expect(token.test()).to.be.a("boolean").which.true;
+    this.tokenInstances.forEach((token, i) => {
+        expect(token.test()).to.be.a("boolean", `At index ${i}`).which.equals(true, `At index ${i}`);
     });
 });
 
 Then<TokenWorld>("the tokens should be:", function(table: DataTable) {
     table.hashes().map(({ value, has_trailing_whitespace, index }, i) => {
-        expect(this.tokenInstances[i].value).to.be.a("string").which.equals(value);
-        expect(this.tokenInstances[i].hasTrailingWhitespace).to.be.a("boolean").which.equals(has_trailing_whitespace == "true");
-        expect(this.tokenInstances[i].index).to.be.a("number").which.equals(Number(index));
-        expect(this.tokenInstances[i].type).to.be.a("number");
-        expect(this.tokenInstances[i].dataType).to.be.a("number");
+        expect(this.tokenInstances[i].value).to.be.a("string", `At index ${i}`).which.equals(value, `At index ${i}`);
+        expect(this.tokenInstances[i].hasTrailingWhitespace).to.be.a("boolean", `At index ${i}`).which.equals(has_trailing_whitespace == "true", `At index ${i}`);
+        expect(this.tokenInstances[i].index).to.be.a("number", `At index ${i}`).which.equals(Number(index), `At index ${i}`);
+        expect(this.tokenInstances[i].type).to.be.a("number", `At index ${i}`);
+        expect(this.tokenInstances[i].dataType).to.be.a("number", `At index ${i}`);
     });
 });

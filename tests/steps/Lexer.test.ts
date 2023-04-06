@@ -41,10 +41,14 @@ Then<LexerWorld>("the tokens do not overlap", function() {
     expect(this.collection).to.be.an("array");
 
     this.collection!.forEach(({ tokens }) => {
-        [...tokens].filter(([ _, token ]) => typeof token == "string").forEach(([ _, token ]) => {
-            conflicts.push(...read.filter(
-                (readToken) => (<string>token).startsWith(readToken)
-            ).map((readToken) => `${readToken} overlaps with ${token}`));
+        [...tokens].filter(([ _, token ]) => {
+            return typeof token == "string";
+        }).forEach(([ _, token ]) => {
+            conflicts.push(...read.filter((readToken) => {
+                return (<string>token).startsWith(readToken);
+            }).map((readToken) => {
+                return `${readToken} overlaps with ${token}`;
+            }));
 
             read.push(<string>token);
         });
@@ -72,9 +76,9 @@ Then<LexerWorld>("the tokens are:", function(table: DataTable) {
 
     this.lexer!.tokens.forEach((token, i) => {
         expect(token).to.be.an("object", `At index ${i}`);
-        expect(token.type).to.be.a("number").which.equals(TokenType[hashes[i].type], `At index ${i}`);
+        expect(token.type).to.be.a("number", `At index ${i}`).which.equals(TokenType[hashes[i].type], `At index ${i}`);
         // @ts-ignore TS refuses to show type errors here and I can't be bothered to fix type errors in a unit test
-        expect(token.dataType).to.be.a("number").which.equals(enumForType[hashes[i].type][hashes[i].data_type], `At index ${i}`);
-        expect(token.value).to.be.a("string").which.equals(hashes[i].token, `At index ${i}`);
+        expect(token.dataType).to.be.a("number", `At index ${i}`).which.equals(enumForType[hashes[i].type][hashes[i].data_type], `At index ${i}`);
+        expect(token.value).to.be.a("string", `At index ${i}`).which.equals(hashes[i].token, `At index ${i}`);
     });
 });

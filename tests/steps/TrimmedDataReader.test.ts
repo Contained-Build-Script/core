@@ -55,31 +55,31 @@ When<TrimmedDataReaderWorld>(/^the (first|last) checkpoint is cleaned up$/, func
 });
 
 Then<TrimmedDataReaderWorld>("all matches are found", function() {
-    this.read.forEach((string) => {
-        expect(string).to.be.a("string");
+    this.read.forEach((string, i) => {
+        expect(string).to.be.a("string", `At index ${i}`);
     });
 
     this.matches.forEach((matchList) => {
         matchList.forEach((match, i) => {
-            expect(match).to.be.a("string").which.equals(this.read[i]);
+            expect(match).to.be.a("string", `At index ${i}`).which.equals(this.read[i], `At index ${i}`);
         });
     });
 });
 
 Then<TrimmedDataReaderWorld>(/^all offsets are at the (start|end) of the input data$/, function(type: "start" | "end") {
     this.table.forEach((line, i) => {
-        expect(this.readers[i]["index"]).to.be.a("number").which.equals(type == "start" ? new TrimmedDataReader(this.readers[i].data).index : line.length);
+        expect(this.readers[i]["index"]).to.be.a("number", `At index ${i}`).which.equals(type == "start" ? new TrimmedDataReader(this.readers[i].data).index : line.length, `At index ${i}`);
     });
 });
 
 Then<TrimmedDataReaderWorld>("the line is followed by a whitespace", function() {
-    this.readers.forEach((reader) => {
-        expect(reader.isAtWhitespace()).to.be.a("boolean").that.is.true;
+    this.readers.forEach((reader, i) => {
+        expect(reader.isAtWhitespace()).to.be.a("boolean", `At index ${i}`).which.equals(true, `At index ${i}`);
     });
 });
 
 Then<TrimmedDataReaderWorld>("all checkpoints are cleaned up", function() {
-    this.readers.forEach((reader) => {
-        expect(reader["checkpoints"]).to.be.an("array").that.is.empty;
+    this.readers.forEach((reader, i) => {
+        expect(reader["checkpoints"]).to.be.an("array", `At index ${i}`).with.a.lengthOf(0, `At index ${i}`);
     });
 });
