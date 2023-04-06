@@ -4,6 +4,7 @@ import type { Lexer } from "../../src/lexer/Lexer";
 
 
 export interface LexerWorld extends World {
-    env?: Lexer | SimpleTokenCollections
+    collection?: SimpleTokenCollections;
+    lexer?: Lexer;
     code?: string;
 }
