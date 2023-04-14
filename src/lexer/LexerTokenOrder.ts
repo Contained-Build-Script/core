@@ -1,4 +1,5 @@
 import type { SimpleTokenCollections } from "./types/SimpleTokenCollections";
+import type { SimpleTokenCollection } from "./types/SimpleTokenCollection";
 import { MutationOperatorType } from "./enums/MutationOperatorType";
 import { AssignOperatorType } from "./enums/AssignOperatorType";
 import { UpdateOperatorType } from "./enums/UpdateOperatorType";
@@ -9,7 +10,6 @@ import { ContextType } from "./enums/ContextType";
 import { KeywordType } from "./enums/KeywordType";
 import { TokenType } from "./enums/TokenType";
 import { ValueType } from "./enums/ValueType";
-import { SimpleTokenCollection } from "./types/SimpleTokenCollection";
 
 export const LEXER_TOKEN_ORDER: SimpleTokenCollections = [
     {
@@ -47,9 +47,10 @@ export const LEXER_TOKEN_ORDER: SimpleTokenCollections = [
             [ContextType.SCOPE_START, "{"],
             [ContextType.SCOPE_END, "}"],
             [ContextType.ARROW, "=>"],
-            [ContextType.CASE_OPEN, ":"],
-            [ContextType.COMMA, ","],
-            [ContextType.LINE_END, ";"]
+            [ContextType.DIVIDER, ":"],
+            [ContextType.SEPARATOR, ","],
+            [ContextType.LINE_END, ";"],
+            [ContextType.ELLIPSIS, "..."]
         ]
     },
     {

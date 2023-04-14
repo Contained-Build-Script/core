@@ -7,6 +7,7 @@ export enum ContextType {
     SCOPE_END,
     LINE_END,
     ARROW,
-    COMMA,
-    CASE_OPEN
+    SEPARATOR,
+    DIVIDER,
+    ELLIPSIS
 }
