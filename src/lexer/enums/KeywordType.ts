@@ -18,5 +18,18 @@ export enum KeywordType {
     CATCH,
     WITH,
     TO,
-    CONSTANT
+    CONSTANT,
+    DELETE,
+    NEW,
+    CLASS,
+    EXTENDS,
+    IMPLEMENTS,
+    INTERFACE,
+    ENUM,
+    PUBLIC,
+    PRIVATE,
+    PROTECTED,
+    STATIC,
+    ABSTRACT,
+    OVERRIDE
 }

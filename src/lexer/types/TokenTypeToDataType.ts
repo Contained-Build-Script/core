@@ -1,7 +1,6 @@
 import type { MutationOperatorType } from "../enums/MutationOperatorType";
 import type { AssignOperatorType } from "../enums/AssignOperatorType";
 import type { UpdateOperatorType } from "../enums/UpdateOperatorType";
-import type { VariableInfoType } from "../enums/VariableInfoType";
 import type { OperatorType } from "../enums/OperatorType";
 import type { VariableType } from "../enums/VariableType";
 import type { ContextType } from "../enums/ContextType";
@@ -15,7 +14,6 @@ export type TokenTypeToDataType<T extends TokenType> = {
     [TokenType.KEYWORD]: KeywordType,
     [TokenType.OPERATOR]: OperatorType,
     [TokenType.VARIABLE]: VariableType,
-    [TokenType.VARIABLE_INFO]: VariableInfoType,
     [TokenType.UPDATE_OPERATOR]: UpdateOperatorType,
     [TokenType.ASSIGN_OPERATOR]: AssignOperatorType,
     [TokenType.MUTATION_OPERATOR]: MutationOperatorType

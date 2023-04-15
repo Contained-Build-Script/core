@@ -9,8 +9,6 @@ export enum TokenType {
     OPERATOR,
     // A variable like #var, #var1, #var2, etc.
     VARIABLE,
-    // A variable definition keyword like string, number, etc.
-    VARIABLE_INFO,
     // An update operator like ++ and --
     UPDATE_OPERATOR,
     // An assignment operator like =, +=, -=, etc.

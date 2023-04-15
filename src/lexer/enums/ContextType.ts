@@ -9,5 +9,6 @@ export enum ContextType {
     ARROW,
     SEPARATOR,
     DIVIDER,
+    NAVIGATOR,
     ELLIPSIS
 }

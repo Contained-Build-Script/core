@@ -3,47 +3,47 @@ Feature: Token test
   Scenario: Create several tokens with a static string parser and parse a line of code
     Given string parser tokens with the following info:
       | token   | type            | data_type  |
-      | define  | KEYWORD         | DEFINE     |
-      | string  | VARIABLE_INFO   | STRING     |
+      | def     | KEYWORD         | DEFINE     |
+      | string  | VARIABLE        | IDENTIFIER |
       | value   | VARIABLE        | IDENTIFIER |
       | =       | ASSIGN_OPERATOR | ASSIGNMENT |
       | "value" | VALUE           | STRING     |
       | ;       | CONTEXT         | LINE_END   |
-    And a data parser with "define string value = \"value\";" as data
+    And a data parser with "def string value = \"value\";" as data
     When parsing the data in order
     Then all tokens should be valid
     And the tokens should be:
       | value   | has_trailing_whitespace | index |
-      | define  | true                    | 0     |
-      | string  | true                    | 7     |
-      | value   | true                    | 14    |
-      | =       | true                    | 20    |
-      | "value" | false                   | 22    |
-      | ;       | false                   | 29    |
+      | def     | true                    | 0     |
+      | string  | true                    | 4     |
+      | value   | true                    | 11    |
+      | =       | true                    | 17    |
+      | "value" | false                   | 19    |
+      | ;       | false                   | 26    |
 
   Scenario: Create several tokens with a regex parser and parse a line of code
     Given regex parser tokens with the following info:
       | token       | type            | data_type  |
-      | define      | KEYWORD         | DEFINE     |
+      | def         | KEYWORD         | DEFINE     |
       | const       | KEYWORD         | CONSTANT   |
-      | bool        | VARIABLE_INFO   | BOOLEAN    |
+      | bool        | VARIABLE        | IDENTIFIER |
       | value       | VARIABLE        | IDENTIFIER |
       | =           | ASSIGN_OPERATOR | ASSIGNMENT |
       | (["']).*?\1 | VALUE           | STRING     |
       | ={2}        | OPERATOR        | EQUAL      |
       | (["']).*?\1 | VALUE           | STRING     |
       | ;           | CONTEXT         | LINE_END   |
-    And a data parser with "define const bool value = \"value\" == 'test';" as data
+    And a data parser with "def const bool value = \"value\" == 'test';" as data
     When parsing the data in order
     Then all tokens should be valid
     And the tokens should be:
       | value   | has_trailing_whitespace | index |
-      | define  | true                    | 0     |
-      | const   | true                    | 7     |
-      | bool    | true                    | 13    |
-      | value   | true                    | 18    |
-      | =       | true                    | 24    |
-      | "value" | true                    | 26    |
-      | ==      | true                    | 34    |
-      | 'test'  | false                   | 37    |
-      | ;       | false                   | 43    |
+      | def     | true                    | 0     |
+      | const   | true                    | 4     |
+      | bool    | true                    | 10    |
+      | value   | true                    | 15    |
+      | =       | true                    | 21    |
+      | "value" | true                    | 23    |
+      | ==      | true                    | 31    |
+      | 'test'  | false                   | 34    |
+      | ;       | false                   | 40    |

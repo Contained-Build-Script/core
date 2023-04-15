@@ -3,7 +3,6 @@ import type { SimpleTokenCollection } from "./types/SimpleTokenCollection";
 import { MutationOperatorType } from "./enums/MutationOperatorType";
 import { AssignOperatorType } from "./enums/AssignOperatorType";
 import { UpdateOperatorType } from "./enums/UpdateOperatorType";
-import { VariableInfoType } from "./enums/VariableInfoType";
 import { VariableType } from "./enums/VariableType";
 import { OperatorType } from "./enums/OperatorType";
 import { ContextType } from "./enums/ContextType";
@@ -50,7 +49,8 @@ export const LEXER_TOKEN_ORDER: SimpleTokenCollections = [
             [ContextType.DIVIDER, ":"],
             [ContextType.SEPARATOR, ","],
             [ContextType.LINE_END, ";"],
-            [ContextType.ELLIPSIS, "..."]
+            [ContextType.ELLIPSIS, "..."],
+            [ContextType.NAVIGATOR, "."]
         ]
     },
     {
@@ -101,19 +101,6 @@ export const LEXER_TOKEN_ORDER: SimpleTokenCollections = [
         tokens: []
     },
     {
-        tokenType: TokenType.VARIABLE_INFO,
-        tokens: [
-            [VariableInfoType.INT, "int"],
-            [VariableInfoType.NULL, "null"],
-            [VariableInfoType.FLOAT, "float"],
-            [VariableInfoType.STRING, "string"],
-            [VariableInfoType.BOOLEAN, "bool"],
-            [VariableInfoType.COMMAND, "command"],
-            [VariableInfoType.FUNCTION, "function"],
-            [VariableInfoType.DIFFERENCE, "difference"]
-        ]
-    },
-    {
         tokenType: TokenType.KEYWORD,
         tokens: [
             [KeywordType.IF, "if"],
@@ -121,6 +108,7 @@ export const LEXER_TOKEN_ORDER: SimpleTokenCollections = [
             [KeywordType.FOREACH, "foreach"],
             [KeywordType.FOR, "for"],
             [KeywordType.WHILE, "while"],
+            [KeywordType.INTERFACE, "interface"],
             [KeywordType.IN, "in"],
             [KeywordType.OF, "of"],
             [KeywordType.SWITCH, "switch"],
@@ -129,13 +117,25 @@ export const LEXER_TOKEN_ORDER: SimpleTokenCollections = [
             [KeywordType.BREAK, "break"],
             [KeywordType.CONTINUE, "continue"],
             [KeywordType.RETURN, "return"],
-            [KeywordType.DEFINE, "define"],
+            [KeywordType.DEFINE, "def"],
             [KeywordType.THROW, "throw"],
             [KeywordType.TRY, "try"],
             [KeywordType.CATCH, "catch"],
             [KeywordType.WITH, "with"],
             [KeywordType.TO, "to"],
-            [KeywordType.CONSTANT, "const"]
+            [KeywordType.CONSTANT, "const"],
+            [KeywordType.DELETE, "delete"],
+            [KeywordType.NEW, "new"],
+            [KeywordType.CLASS, "class"],
+            [KeywordType.EXTENDS, "extends"],
+            [KeywordType.IMPLEMENTS, "implements"],
+            [KeywordType.ENUM, "enum"],
+            [KeywordType.PUBLIC, "public"],
+            [KeywordType.PRIVATE, "private"],
+            [KeywordType.PROTECTED, "protected"],
+            [KeywordType.STATIC, "static"],
+            [KeywordType.ABSTRACT, "abstract"],
+            [KeywordType.OVERRIDE, "override"]
         ]
     },
     {
@@ -152,17 +152,18 @@ export const LEXER_TOKEN_ORDER: SimpleTokenCollections = [
 
 (<SimpleTokenCollection<TokenType.VARIABLE>>LEXER_TOKEN_ORDER.find((collection) => collection.tokenType == TokenType.VARIABLE)).tokens.push([
     VariableType.IDENTIFIER,
-    new RegExp(`(?!\\d|^(${LEXER_TOKEN_ORDER.reduce((words, { tokens }) => {
-        tokens.forEach(([_, token]) => {
-            const regex = /^\w+$/m;
-
-            if (typeof token == "string" && regex.test(token)) {
-                words.push(token);
-            } else if (Array.isArray(token)) {
-                words.push(...token.filter((word) => regex.test(word)));
-            }
-        });
+    new RegExp(`(?!\\d|^(${[...LEXER_TOKEN_ORDER].reduce((words, { tokens }) => {
+        Array(...tokens).filter(
+            ([ _, token ]) => typeof token == "string" && /^\w+$/m.test(token)
+        ).forEach(([ _, token ]) => words.push(<string>token));
 
         return words;
-    }, <string[]>[]).join("|")}([\\s[\\]{}()\\/\\\\+\\-%=!*^&|<>,.\`"';:?]|$)))[^\\s[\\]{}()\\/\\\\+\\-%=!*^&|<>,.\`"';:?]+`)
-])
+    }, [
+        "null",
+        "NULL",
+        "true",
+        "TRUE",
+        "false",
+        "FALSE"
+    ]).join("|")})([\\s[\\]{}()\\/\\\\+\\-%=!*^&|<>,.\`"';:?]|$))[^\\s[\\]{}()\\/\\\\+\\-%=!*^&|<>,.\`"';:?]+`)
+]);

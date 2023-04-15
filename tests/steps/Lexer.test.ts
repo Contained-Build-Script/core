@@ -4,7 +4,6 @@ import { expect } from "chai";
 import { MutationOperatorType } from "../../src/lexer/enums/MutationOperatorType";
 import { UpdateOperatorType } from "../../src/lexer/enums/UpdateOperatorType";
 import { AssignOperatorType } from "../../src/lexer/enums/AssignOperatorType";
-import { VariableInfoType } from "../../src/lexer/enums/VariableInfoType";
 import { VariableType } from "../../src/lexer/enums/VariableType";
 import { LEXER_TOKEN_ORDER } from "../../src/lexer/LexerTokenOrder";
 import { OperatorType } from "../../src/lexer/enums/OperatorType";
@@ -65,7 +64,6 @@ Then<LexerWorld>("the tokens are:", function(table: DataTable) {
         KEYWORD: KeywordType,
         OPERATOR: OperatorType,
         VARIABLE: VariableType,
-        VARIABLE_INFO: VariableInfoType,
         UPDATE_OPERATOR: UpdateOperatorType,
         ASSIGN_OPERATOR: AssignOperatorType,
         MUTATION_OPERATOR: MutationOperatorType

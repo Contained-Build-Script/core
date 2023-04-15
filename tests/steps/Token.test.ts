@@ -5,7 +5,6 @@ import { MutationOperatorType } from "../../src/lexer/enums/MutationOperatorType
 import { UpdateOperatorType } from "../../src/lexer/enums/UpdateOperatorType";
 import { AssignOperatorType } from "../../src/lexer/enums/AssignOperatorType";
 import { TrimmedDataReader } from "../../src/lexer/utils/TrimmedDataReader";
-import { VariableInfoType } from "../../src/lexer/enums/VariableInfoType";
 import { VariableType } from "../../src/lexer/enums/VariableType";
 import { OperatorType } from "../../src/lexer/enums/OperatorType";
 import { KeywordType } from "../../src/lexer/enums/KeywordType";
@@ -27,7 +26,6 @@ Given<TokenWorld>(/^(string|regex) parser tokens with the following info:$/, fun
         KEYWORD: KeywordType,
         OPERATOR: OperatorType,
         VARIABLE: VariableType,
-        VARIABLE_INFO: VariableInfoType,
         UPDATE_OPERATOR: UpdateOperatorType,
         ASSIGN_OPERATOR: AssignOperatorType,
         MUTATION_OPERATOR: MutationOperatorType
